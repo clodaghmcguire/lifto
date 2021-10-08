@@ -2,6 +2,13 @@
 
 A picard based liftover service
 
+## Capabilities
+
+- translate coordinates (variant) to a different assembly version
+- return information about mapping (one-to-one, reciprocal, collapsed, spread...)
+- Ability to curate a variant liftover by accepting or rejecting (user, timestamp, decision)
+
+
 ## API 
 
 liftO provides a RESTful API to translate single variants and batches of variants between assemblies
