@@ -1,6 +1,27 @@
 # lifto
 
-A picard based liftover service
+Uses the UCSU liftover executable from https://genome-store.ucsc.edu/
+Build docker container with make file:
+- Downloads liftover tool
+- Downloads chain files and makes conversion from hg19 to GRCh37
+- Builds docker container - currently gets tagged as kingspm/lifto:0.1 (not in dockerhub at present)
+- Removes all downloaded files after build
+
+Simple query at: http://server/api/v1/<input_assembly>/<input_variant>
+eg: http://localhost:5000/api/v1/grch37/1:55516888:A:T
+
+returns:
+```
+{
+  "data": {
+    "datetime": "Tue, 12 Oct 2021 15:14:07 GMT", 
+    "input_assembly": "grch37", 
+    "input_variant": "1:55516888:A:T", 
+    "output_assembly": "GRCh38", 
+    "result": "1:55051215:A:T"
+  }
+}
+```
 
 ## Capabilities
 
