@@ -1,6 +1,7 @@
 # lifto
 
 Uses the UCSU liftover executable from https://genome-store.ucsc.edu/
+
 Build docker container with make file:
 - Downloads liftover tool
 - Downloads chain files and makes conversion from hg19 to GRCh37
