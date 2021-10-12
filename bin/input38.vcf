@@ -1,7 +1,0 @@
-##fileformat=VCFv4.2
-#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-chr20	10001019	.	T	G	.	.	.
-chr20	10001298	.	T	A	.	.	.
-chr20	10001436	.	A	AAGGCT	.	.	.
-chr20	10001474	.	C	T	.	.	.
-chr20	10001617	.	C	A	.	.	.

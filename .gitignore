@@ -1,3 +1,9 @@
+# Repo specific
+bin
+resources
+*.chain
+*.fa 
+
 # ---> Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
