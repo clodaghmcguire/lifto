@@ -7,10 +7,12 @@ Build docker container with make file:
 - Builds docker container - currently gets tagged as kingspm/lifto:0.1 (not in dockerhub at present)
 - Removes all downloaded files after build
 
-Simple query at: http://server/api/v1/<input_assembly>/<input_variant>
+Simple query at: http://server/api/v1/[input_assembly]/[input_variant]
+
 eg: http://localhost:5000/api/v1/grch37/1:55516888:A:T
 
 returns:
+
 ```
 {
   "data": {
