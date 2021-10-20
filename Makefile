@@ -1,6 +1,6 @@
 
 
-all: GRCh38ToGRCh37.chain GRCh37ToGRCh38.chain Liftover move_files BuildDocker RemoveFiles  # grch38.dict grch37.dict
+all: GRCh38ToGRCh37.chain GRCh37ToGRCh38.chain Liftover move_files  grch37.fa grch38.fa # BuildDocker RemoveFiles # grch38.dict grch37.dict
 
 # get chainfile for hg19 to GRCh37 (basically just chromosome name mapping)
 hg19ToGRCh37.over.chain:

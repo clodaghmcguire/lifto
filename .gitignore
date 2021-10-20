@@ -2,7 +2,9 @@
 bin
 resources
 *.chain
-*.fa 
+*.fa
+temp
+client_examples
 
 # ---> Python
 # Byte-compiled / optimized / DLL files
