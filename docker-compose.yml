@@ -1,12 +1,11 @@
 version: '3.5'
 services:
   lifto:
-    build: .
+    image: kingspm/lifto:0.1
     restart: always
     environment: 
       FLASK_APP: flask_app
-      FLASK_ENV: development
     ports:
       - "5000:5000"
     volumes:
-      - ~/working_dir/lifto2/resources:/resources
+      - ./resources:/resources

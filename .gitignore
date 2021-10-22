@@ -1,10 +1,11 @@
 # Repo specific
-bin
 resources
 *.chain
+*.chain.gz
 *.fa
-temp
 client_examples
+*.vcf
+*.vcf.unmap
 
 # ---> Python
 # Byte-compiled / optimized / DLL files

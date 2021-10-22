@@ -1,6 +1,7 @@
 
 
-all: GRCh38ToGRCh37.chain GRCh37ToGRCh38.chain Liftover move_files  grch37.fa grch38.fa # BuildDocker RemoveFiles # grch38.dict grch37.dict
+all: GRCh38ToGRCh37.chain GRCh37ToGRCh38.chain grch37.fa grch38.fa move_files
+BuildDocker: BuildDocker
 
 # get chainfile for hg19 to GRCh37 (basically just chromosome name mapping)
 hg19ToGRCh37.over.chain:
@@ -47,22 +48,6 @@ GRCh37ToGRCh38.chain: hg19ToHg38.over.chain hg19ToGRCh37.over.chain GRCh37ToGRCh
 		awk '{ if (/^$$/) { empty+=1; if (empty==1) { print } } else { empty=0; print } }' | \
 		cat - GRCh37ToGRCh38.rcspatch.chain > GRCh37ToGRCh38.chain
 
-# Get UCSC liftover executable
-Liftover:
-	wget -c https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/liftOver
-
-move_files:
-	mkdir -p resources bin
-	mv *.chain* resources
-	chmod 775 liftOver
-	mv liftOver bin
-
-BuildDocker:
-	docker build . -t kingspm/lifto:0.1
-
-RemoveFiles:
-	rm -r resources bin
-
 # get references
 grch37.fa:
 	wget -c -O grch37.fa.gz ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/phase2_reference_assembly_sequence/hs37d5.fa.gz
@@ -72,8 +57,10 @@ grch38.fa:
 	wget -c -O grch38.fa.gz ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
 	gunzip grch38.fa.gz
 
-grch37.dict: grch37.fa
-	java -jar ../bin/picard.jar CreateSequenceDictionary -R grch37.fa
+move_files:
+	mkdir -p resources
+	mv *.chain *.chain.gz *.fa resources
 
-grch38.dict: grch38.fa
-	java -jar ../bin/picard.jar CreateSequenceDictionary -R grch38.fa
+BuildDocker:
+	docker build . -t kingspm/lifto:0.1
+	docker push kingspm/lifto:0.1

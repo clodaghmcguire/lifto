@@ -5,8 +5,7 @@ WORKDIR /app
 RUN apt-get update && apt-get -y install gcc libz-dev
 COPY flask_app flask_app
 COPY requirements.txt requirements.txt
-RUN mkdir -p temp && \
-    pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 ENV FLASK_APP=flask_app
 EXPOSE 5000

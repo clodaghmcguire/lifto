@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 import datetime
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
-from .liftolib import variant_format_valid, assembly_valid, write_vcf
+from .functions import variant_format_valid, assembly_valid, write_vcf, read_vcf
 
 bp = Blueprint('auth', __name__, url_prefix='')
 
@@ -37,36 +37,27 @@ def api(input_assembly, input_variant):
 
     try:
       mapTree, targetChromSizes, sourceChromSizes = read_chain_file(chain_file)
-      crossmap_vcf_file(mapping = mapTree, infile="temp/in_file.vcf", outfile="temp/out_file.vcf", liftoverfile=chain_file, refgenome=refgenome)
+      crossmap_vcf_file(
+        mapping = mapTree, infile="in_file.vcf", \
+        outfile="out_file.vcf", liftoverfile=chain_file, refgenome=refgenome
+        )
     except Exception as e:
       result = {
         "result": "FAILED",
         "error": "CROSSMAP ERROR: {}".format(e)
         }
     else:
-      ouput = open("temp/out_file.vcf", "r")
-      variants = [line.strip() for line in ouput.readlines() if not line.startswith('#')]
-      if len(variants) == 1:
-        variant = variants[0].split("\t")
-        variant = (variant[0].strip('chr') + ":" + variant[1] + ":" + variant[3] + ":" + variant[4])
+      mapped_variant = read_vcf("out_file.vcf", mapped_vcf=True)
+      if mapped_variant:
         result = {
           "result": "MAPPED",
-          "target": variant
+          "target": mapped_variant
           }
-      elif len(variants) == 0:
-        ouput = open("temp/out_file.vcf.unmap", 'r')
-        variants = [line.strip() for line in ouput.readlines() if not line.startswith('#')]
-        variant = variants[0].split("\t")
-        crossmap_error = variant[8]
-        variant = (variant[0].strip('chr') + ":" + variant[1] + ":" + variant[3] + ":" + variant[4])
-        result = {
-        "result": crossmap_error,
-        "target": variant
-        }
       else:
+        unmapped_variant, crossmap_error = read_vcf("out_file.vcf.unmap", mapped_vcf=False)
         result = {
-          "result": "UNMAPPED",
-          "target": "unknown error"
+          "result": crossmap_error,
+          "target": unmapped_variant
           }
 
   output_json = jsonify({
