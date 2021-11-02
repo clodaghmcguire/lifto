@@ -1,4 +1,4 @@
-
+.PHONY: all
 
 all: GRCh38ToGRCh37.chain GRCh37ToGRCh38.chain grch38.dict grch37.dict
 
