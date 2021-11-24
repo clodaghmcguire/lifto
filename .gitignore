@@ -4,8 +4,8 @@ resources
 *.chain.gz
 *.fa
 client_examples
-*.vcf
-*.vcf.unmap
+in_file.*
+out_file.*
 
 # ---> Python
 # Byte-compiled / optimized / DLL files

@@ -1,9 +1,17 @@
 import re
+import os
 
-
-def variant_format_valid(input_variant):
+def snv_format_valid(snv_variant):
   pattern = re.compile("^[0-9XYMT]{1,2}:\d+:[ACGTacgt]+:[ACGTacgt]+$")
-  if pattern.match(input_variant):
+  if pattern.match(snv_variant):
+    return True
+  else:
+    return False
+
+
+def sv_format_valid(sv_input):
+  pattern = re.compile("^[0-9XYMT]{1,2}:\d+:\d+$")
+  if pattern.match(sv_input):
     return True
   else:
     return False
@@ -11,15 +19,18 @@ def variant_format_valid(input_variant):
 
 def assembly_valid(input_assembly):
   if input_assembly.lower() in ['grch37','37']:
-    return 'GRCh38', '/resources/GRCh37ToGRCh38.chain', '/resources/grch38.fa'
+    return 'GRCh38', 'resources/GRCh37ToGRCh38.chain', 'resources/grch38.fa'
   elif input_assembly.lower() in ['grch38','38']:
-    return 'GRCh37', '/resources/GRCh38ToGRCh37.chain', '/resources/grch37.fa'
+    return 'GRCh37', 'resources/GRCh38ToGRCh37.chain', 'resources/grch37.fa'
   else:
     return False
 
 
 def write_vcf(input_variant):
   output_file='in_file.vcf'
+  if os.path.exists(output_file):
+    os.remove(output_file)
+
   CHROM, POS, REF, ALT = input_variant.split(":")
   with open(output_file, 'w') as writer:
     writer.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
@@ -41,4 +52,29 @@ def read_vcf(f, mapped_vcf=True):
   else:
     return False
 
+
+def write_bed(input_variant):
+  output_file='in_file.bed'
+  if os.path.exists(output_file):
+    os.remove(output_file)
+
+  CHROM, START, END = input_variant.split(":")
+  with open(output_file, 'w') as writer:
+    writer.write(CHROM + "\t" + START + "\t" + END)
+  return output_file
+
+
+def read_bed(f, mapped_bed=True):
+  data = open(f, "r")
+  line = [line.strip() for line in data.readlines() if not line.startswith('#')]
+  if len(line) == 1:
+    sv = line[0].split("\t")
+    sv_string = (sv[0].strip('chr') + ":" + sv[1] + ":" + sv[2])
+    if mapped_bed:
+      return sv_string
+    else:
+      crossmap_error = sv[3]
+      return sv_string, crossmap_error
+  else:
+    return False
 

@@ -2,20 +2,30 @@
 
 Uses Python Crossmap library from https://crossmap.readthedocs.io/
 
-Simple query at: http://[server]/api/v1/[input_assembly]/[input_variant]
+### SNV Liftover Endpoint
+Simple query at: http://[server]/api/v1/snv/[input_assembly]/[input_variant]
 
-eg: http://localhost:5000/api/v1/grch37/1:55516888:A:T
+eg: http://localhost:5000/api/v1/snv/grch37/1:55516888:A:T
 
-returns:
+
+### Region (e.g SV) Liftover Endpoint
+Simple query at: http://[server]/api/v1/sv/[input_assembly]/[chr]:[start]:[end]
+
+eg: http://localhost:5000/api/v1/sv/grch37/1:55516888:55517999
+
+### Output:
 
 ```
 {
   "data": {
-    "datetime": "Tue, 12 Oct 2021 15:14:07 GMT", 
-    "input_assembly": "grch37", 
-    "input_variant": "1:55516888:A:T", 
-    "output_assembly": "GRCh38", 
-    "result": "1:55051215:A:T"
+    "datetime": "Wed, 24 Nov 2021 16:35:22 GMT", 
+    "input_assembly": "[grch37|grch38]", 
+    "input_variant": "1:55516N888:G:A", 
+    "output_assembly": "[grch38|grch37]", 
+    "response": {
+      "output": "[ Mapped result | Error message ]", 
+      "result": "[ MAPPED | FAILED ]"
+    }
   }
 }
 ```
