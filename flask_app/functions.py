@@ -1,5 +1,6 @@
 import re
 import os
+import requests
 
 def snv_format_valid(snv_variant):
   pattern = re.compile("^[0-9XYMT]{1,2}:\d+:[ACGTacgt]+:[ACGTacgt]+$")
@@ -78,3 +79,23 @@ def read_bed(f, mapped_bed=True):
   else:
     return False
 
+
+def annotate(assembly, variant):
+  if assembly.lower() in ['grch37','37']:
+    assembly = 'GRCh37'
+  elif assembly.lower() in ['grch38','38']:
+    assembly = 'GRCh38'
+  url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{assembly}/{variant}/mane_select?content-type=application%2Fjson"
+  response = requests.get(url)
+  return response.json()
+
+
+def validate(output_assembly, mapped_variant, annotation):
+  assembly = output_assembly.lower()
+  transcript = next(iter(annotation))
+  variant = annotation[transcript]['primary_assembly_loci'][assembly]['vcf']
+  variantvalidator_mapping = variant['chr']+':'+variant['pos']+':'+variant['ref']+':'+variant['alt']
+  if variantvalidator_mapping == mapped_variant:
+    return f"validated mapped variant {mapped_variant}, VariantValidator mapped variant {variantvalidator_mapping}"
+  else:
+    return f"variant mismatch with mapped variant {mapped_variant} and VariantValidator mapped variant {variantvalidator_mapping}"

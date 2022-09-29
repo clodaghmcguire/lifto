@@ -7,7 +7,7 @@ from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
-from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed
+from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed, annotate, validate
 
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
@@ -92,6 +92,9 @@ def snv_liftover(input_assembly, snv_variant):
           }
           message = "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error)
 
+      annotation = annotate(input_assembly, snv_variant)
+      validate_variant = validate(output_assembly, mapped_variant, annotation)
+
       output = {
         "query": {
           "assembly": input_assembly,
@@ -103,6 +106,10 @@ def snv_liftover(input_assembly, snv_variant):
         "evidence": {
           "mapping": result['mapping'],
           "confirm": "yes/no",
+          "meta": {
+            "validation": validate_variant,
+            "variantvalidator": annotation
+          }
         },
         "meta": {
           "datetime": datetime.datetime.now(),
