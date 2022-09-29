@@ -38,3 +38,20 @@ Use the makefile to generate reference files:
 - Copied to local 'resources' folder (requires volume mapping in Docker compose file)
 
 Use the docker-compose to run the dockerised container, or the Dockerfile to build your own image
+
+
+Create development Mongo database
+```commandline
+mkdir mongo_data
+chmod 777 -R mongo_data
+sudo docker-compose up -d
+```
+
+Run flask in virtual environment
+```commandline
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+export FLASK_APP=flask_app
+flask run
+```
