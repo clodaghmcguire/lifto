@@ -25,18 +25,22 @@ def home():
 def snv_liftover(input_assembly, snv_variant):
 
   if not snv_format_valid(snv_variant):
-    result = {
-      "result": "FAILED",
-      "output": "Invalid input variant formatting: {}".format(snv_variant)
-      }
-    output_assembly = 'n/a'
+    message = "Invalid input variant formatting: {}".format(snv_variant)
+    output_json = jsonify({"data":
+      {
+        "query": {"assembly": input_assembly, "variant": snv_variant},
+        "evidence": {"mapping": "FAILED"},
+        "meta": {"datetime": datetime.datetime.now(), "output": message}
+      }})
 
   elif not assembly_valid(input_assembly):
-    result = {
-      "result": "FAILED",
-      "output": "Invalid assembly: {}".format(input_assembly)
-      }
-    output_assembly = 'n/a'
+    message = "Invalid assembly: {}".format(input_assembly)
+    output_json = jsonify({"data":
+      {
+        "query": {"assembly": input_assembly, "variant": snv_variant},
+        "evidence": {"mapping": "FAILED"},
+        "meta": {"datetime": datetime.datetime.now(), "output": message}
+      }})
   else:
     input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
 
