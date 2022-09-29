@@ -8,6 +8,7 @@ def create_app(test_config=None):
     app.secret_key = 'asiubdfgrretertedfgdfgaconbcyI'
     app.config["DEBUG"] = True
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+    app.config['JSON_SORT_KEYS'] = False
     app.register_blueprint(routes.bp)
 
     if test_config is None:

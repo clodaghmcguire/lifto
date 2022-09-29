@@ -1,13 +1,18 @@
 from flask import Blueprint, jsonify
 import datetime
 import os
+import json
+from bson import json_util
+from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
 from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed
 
 bp = Blueprint('auth', __name__, url_prefix='')
-
+client = MongoClient('localhost', 27017)
+db = client.flask_db
+lifto = db.lifto
 
 @bp.route('/', methods=['GET'])
 def home():
@@ -33,48 +38,75 @@ def snv_liftover(input_assembly, snv_variant):
       }
     output_assembly = 'n/a'
   else:
-    output_assembly, chain_file, refgenome = assembly_valid(input_assembly)
+    input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
 
-    write_vcf(snv_variant)
-
-    try:
-      outfile="out_file.vcf"
-      if os.path.exists(outfile):
-        os.remove(outfile)
-
-      mapTree, targetChromSizes, sourceChromSizes = read_chain_file(chain_file)
-      crossmap_vcf_file(
-        mapping = mapTree, infile="in_file.vcf", \
-        outfile=outfile, liftoverfile=chain_file, refgenome=refgenome
-        )
-    except Exception as e:
-      result = {
-        "result": "FAILED",
-        "output": "CROSSMAP ERROR: {}".format(e)
-        }
+    existing_variant = lifto.find_one({"query": {
+      "assembly": input_assembly, "chrom": input_CHROM, "pos": input_POS, "ref": input_REF, "alt": input_ALT
+    }})
+    if existing_variant:
+      print(existing_variant)
+      output = json.loads(json_util.dumps(existing_variant))
+      output_json = jsonify({"data": output})
     else:
-      mapped_variant = read_vcf(outfile, mapped_vcf=True)
-      if mapped_variant:
-        result = {
-          "result": "MAPPED",
-          "output": mapped_variant
-          }
-      else:
-        unmapped_variant, crossmap_error = read_vcf("{}.unmap".format(outfile), mapped_vcf=False)
+      output_assembly, chain_file, refgenome = assembly_valid(input_assembly)
+
+      write_vcf(snv_variant)
+
+      try:
+        outfile = "out_file.vcf"
+        if os.path.exists(outfile):
+          os.remove(outfile)
+
+        mapTree, targetChromSizes, sourceChromSizes = read_chain_file(chain_file)
+        crossmap_vcf_file(
+          mapping=mapTree, infile="in_file.vcf", \
+          outfile=outfile, liftoverfile=chain_file, refgenome=refgenome
+        )
+      except Exception as e:
         result = {
           "result": "FAILED",
-          "output": "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error)
+          "output": "CROSSMAP ERROR: {}".format(e)
+        }
+      else:
+        mapped_variant = read_vcf(outfile, mapped_vcf=True)
+        if mapped_variant:
+          CHROM, POS, REF, ALT = mapped_variant.split(":")
+          result = {
+            "mapping": {
+              "assembly": output_assembly,
+              "chrom": CHROM,
+              "pos": POS,
+              "ref": REF,
+              "alt": ALT,
+            }
           }
+          message = "successfully mapped"
+        else:
+          unmapped_variant, crossmap_error = read_vcf("{}.unmap".format(outfile), mapped_vcf=False)
+          result = {
+            "mapping": "FAILED",
+          }
+          message = "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error)
 
-  output_json = jsonify({
-    'data': {
-      'input_assembly': input_assembly,
-      'input_variant': snv_variant,
-      'output_assembly': output_assembly,
-      'response': result,
-      'datetime': datetime.datetime.now()
+      output = {
+        "query": {
+          "assembly": input_assembly,
+          "chrom": input_CHROM,
+          "pos": input_POS,
+          "ref": input_REF,
+          "alt": input_ALT
+        },
+        "evidence": {
+          "mapping": result['mapping'],
+          "confirm": "yes/no",
+        },
+        "meta": {
+          "datetime": datetime.datetime.now(),
+          "output": message
+        }
       }
-    })
+      output_json = jsonify({"data": output})
+      submit_query = lifto.insert_one(output)
 
   return output_json
 

@@ -6,6 +6,7 @@ resources
 client_examples
 in_file.*
 out_file.*
+mongo_data/
 
 # ---> Python
 # Byte-compiled / optimized / DLL files

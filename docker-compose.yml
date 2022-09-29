@@ -1,11 +1,17 @@
 version: '3.5'
 services:
-  lifto:
-    image: kingspm/lifto:0.1
-    restart: always
-    environment: 
-      FLASK_APP: flask_app
+#  lifto:
+#    image: kingspm/lifto:0.1
+#    restart: always
+#    environment:
+#      FLASK_APP: flask_app
+#    ports:
+#      - "5000:5000"
+#    volumes:
+#      - ./resources:/resources
+  mongodb:
+    image: "bitnami/mongodb:5.0"
     ports:
-      - "5000:5000"
+      - "27017:27017"
     volumes:
-      - ./resources:/resources
+      - ./mongo_data:/bitnami/mongodb
