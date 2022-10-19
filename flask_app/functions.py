@@ -88,14 +88,3 @@ def annotate(assembly, variant):
   url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{assembly}/{variant}/mane_select?content-type=application%2Fjson"
   response = requests.get(url)
   return response.json()
-
-
-def validate(output_assembly, mapped_variant, annotation):
-  assembly = output_assembly.lower()
-  transcript = next(iter(annotation))
-  variant = annotation[transcript]['primary_assembly_loci'][assembly]['vcf']
-  variantvalidator_mapping = variant['chr']+':'+variant['pos']+':'+variant['ref']+':'+variant['alt']
-  if variantvalidator_mapping == mapped_variant:
-    return f"validated mapped variant {mapped_variant}, VariantValidator mapped variant {variantvalidator_mapping}"
-  else:
-    return f"variant mismatch with mapped variant {mapped_variant} and VariantValidator mapped variant {variantvalidator_mapping}"

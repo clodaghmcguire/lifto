@@ -7,8 +7,7 @@ from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
-from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed, annotate, validate
-
+from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed, annotate
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
 db = client.flask_db
@@ -25,22 +24,22 @@ def home():
 def snv_liftover(input_assembly, snv_variant):
 
   if not snv_format_valid(snv_variant):
-    message = "Invalid input variant formatting: {}".format(snv_variant)
-    output_json = jsonify({"data":
-      {
+    output = {
         "query": {"assembly": input_assembly, "variant": snv_variant},
-        "evidence": {"mapping": "FAILED"},
-        "meta": {"datetime": datetime.datetime.now(), "output": message}
-      }})
+        "mapping": "FAILED",
+        "warning": "Invalid input variant formatting: {}".format(snv_variant),
+        "datetime": datetime.datetime.now()
+        }
+    output_json = jsonify({"data": output})
 
   elif not assembly_valid(input_assembly):
-    message = "Invalid assembly: {}".format(input_assembly)
-    output_json = jsonify({"data":
-      {
+    output = {
         "query": {"assembly": input_assembly, "variant": snv_variant},
-        "evidence": {"mapping": "FAILED"},
-        "meta": {"datetime": datetime.datetime.now(), "output": message}
-      }})
+        "mapping": "FAILED",
+        "warning": "Invalid assembly: {}".format(input_assembly),
+        "datetime": datetime.datetime.now()
+      }
+    output_json = jsonify({"data": output})
   else:
     input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
 
@@ -51,6 +50,7 @@ def snv_liftover(input_assembly, snv_variant):
       print(existing_variant)
       output = json.loads(json_util.dumps(existing_variant))
       output_json = jsonify({"data": output})
+
     else:
       output_assembly, chain_file, refgenome = assembly_valid(input_assembly)
 
@@ -67,58 +67,70 @@ def snv_liftover(input_assembly, snv_variant):
           outfile=outfile, liftoverfile=chain_file, refgenome=refgenome
         )
       except Exception as e:
-        result = {
-          "result": "FAILED",
-          "output": "CROSSMAP ERROR: {}".format(e)
+        output = {"query": {
+            "assembly": input_assembly,
+            "chrom": input_CHROM,
+            "pos": input_POS,
+            "ref": input_REF,
+            "alt": input_ALT
+          },
+          "mapping": "FAILED",
+          "warning": "CROSSMAP ERROR: {}".format(e),
+          "datetime": datetime.datetime.now()
         }
-      else:
-        mapped_variant = read_vcf(outfile, mapped_vcf=True)
-        if mapped_variant:
-          CHROM, POS, REF, ALT = mapped_variant.split(":")
-          result = {
-            "mapping": {
+        output_json = jsonify({"data": output})
+
+      mapped_variant = read_vcf(outfile, mapped_vcf=True)
+      if mapped_variant:
+        CHROM, POS, REF, ALT = mapped_variant.split(":")
+
+        annotation = annotate(input_assembly, snv_variant)
+
+        output = {
+          "query": {
+            "assembly": input_assembly,
+            "chrom": input_CHROM,
+            "pos": input_POS,
+            "ref": input_REF,
+            "alt": input_ALT
+          },
+          "mapping": {
+            "coordinates": {
               "assembly": output_assembly,
               "chrom": CHROM,
               "pos": POS,
               "ref": REF,
               "alt": ALT,
+            },
+            "meta": {
+              "source": "lifto",
+              "datetime": datetime.datetime.now()
+            },
+            "evidence": {
+              "variantvalidator": annotation
             }
-          }
-          message = "successfully mapped"
-        else:
-          unmapped_variant, crossmap_error = read_vcf("{}.unmap".format(outfile), mapped_vcf=False)
-          result = {
-            "mapping": "FAILED",
-          }
-          message = "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error)
-
-      annotation = annotate(input_assembly, snv_variant)
-      validate_variant = validate(output_assembly, mapped_variant, annotation)
-
-      output = {
-        "query": {
-          "assembly": input_assembly,
-          "chrom": input_CHROM,
-          "pos": input_POS,
-          "ref": input_REF,
-          "alt": input_ALT
-        },
-        "evidence": {
-          "mapping": result['mapping'],
-          "confirm": "yes/no",
+          },
           "meta": {
-            "validation": validate_variant,
-            "variantvalidator": annotation
+            "datetime": datetime.datetime.now(),
           }
-        },
-        "meta": {
-          "datetime": datetime.datetime.now(),
-          "output": message
         }
-      }
-      output_json = jsonify({"data": output})
-      submit_query = lifto.insert_one(output)
+        output_json = jsonify({"data": output})
+        submit_query = lifto.insert_one(output)
+      else:
+        unmapped_variant, crossmap_error = read_vcf("{}.unmap".format(outfile), mapped_vcf=False)
+        output = {"query": {
+            "assembly": input_assembly,
+            "chrom": input_CHROM,
+            "pos": input_POS,
+            "ref": input_REF,
+            "alt": input_ALT
+          },
+        "mapping": "FAILED",
+        "warning": "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error),
+        "datetime": datetime.datetime.now()
+        }
 
+        output_json = jsonify({"data": output})
   return output_json
 
 
