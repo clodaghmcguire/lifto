@@ -114,8 +114,10 @@ def snv_liftover(input_assembly, snv_variant):
             "datetime": datetime.datetime.now(),
           }
         }
-        output_json = jsonify({"data": output})
+
         submit_query = lifto.insert_one(output)
+        output_json = jsonify({"data": json.loads(json_util.dumps(output))})
+
       else:
         unmapped_variant, crossmap_error = read_vcf("{}.unmap".format(outfile), mapped_vcf=False)
         output = {"query": {
