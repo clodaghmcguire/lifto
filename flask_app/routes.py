@@ -3,6 +3,7 @@ import datetime
 import os
 import json
 from bson import json_util
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
@@ -133,6 +134,20 @@ def snv_liftover(input_assembly, snv_variant):
         }
 
         output_json = jsonify({"data": output})
+  return output_json
+
+@bp.route('/api/v1/snv/<variant>', methods=(['GET', 'POST']))
+def confirm_liftover(variant):
+
+  update_record = lifto.update_one({"_id": ObjectId(variant)},
+                                   {"$push":
+                                       {"mapping.verification":
+                                          {"confirm": True, "datetime": datetime.datetime.now()
+                                           }
+                                        }
+                                    })
+  existing_variant = lifto.find_one({"_id": ObjectId(variant)})
+  output_json = jsonify(json.loads(json_util.dumps(existing_variant)))
   return output_json
 
 
