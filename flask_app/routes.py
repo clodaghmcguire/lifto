@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import datetime
 import os
 import json
+import socket
 from bson import json_util
 from bson.objectid import ObjectId
 from pymongo import MongoClient
@@ -108,7 +109,8 @@ def snv_liftover(input_assembly, snv_variant):
               "datetime": datetime.datetime.now()
             },
             "evidence": {
-              "variantvalidator": annotation
+              "variantvalidator": annotation,
+              "datetime": datetime.datetime.now()
             }
           },
           "meta": {
@@ -136,14 +138,18 @@ def snv_liftover(input_assembly, snv_variant):
         output_json = jsonify({"data": output})
   return output_json
 
-@bp.route('/api/v1/snv/<variant>', methods=(['GET', 'POST']))
+@bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
 def confirm_liftover(variant):
+  hostname = socket.gethostname()
+  user = socket.gethostbyname(hostname)
+  verification_data = request.get_json(silent=True)
+  verification_data['user'] = user
+  verification_data['datetime'] = datetime.datetime.now()
 
   update_record = lifto.update_one({"_id": ObjectId(variant)},
                                    {"$push":
-                                       {"mapping.verification":
-                                          {"confirm": True, "datetime": datetime.datetime.now()
-                                           }
+                                       {"mapping.verification": verification_data
+
                                         }
                                     })
   existing_variant = lifto.find_one({"_id": ObjectId(variant)})
