@@ -9,9 +9,11 @@ def get_liftover(build, variant):
     return response.json()
 
 
-def approve_liftover(variant_id, confirmation):
+def approve_liftover(variant_id, confirmation, comments, user):
     url = f"http://127.0.0.1:5000/api/v1/{variant_id}/"
-    confirm = {'confirm': confirmation}
+    confirm = {'confirm': confirmation,
+               'comments': comments,
+               'user': user}
     response = requests.get(url, json=confirm)
     return response.json()
 
@@ -22,4 +24,6 @@ if __name__ == '__main__':
     print(json.dumps(liftover, indent=4))
 
     confirmation = input("confirm liftover? [true/false]: ")
-    pp.pprint(approve_liftover(liftover['data']['_id']['$oid'], confirmation.lower()))
+    comments = input("add comments: ")
+    user = input("your name: ")
+    pp.pprint(approve_liftover(liftover['data']['_id']['$oid'], confirmation.lower(), comments, user))

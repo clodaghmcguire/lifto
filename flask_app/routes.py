@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request
 import datetime
 import os
 import json
-import socket
 from bson import json_util
 from bson.objectid import ObjectId
 from pymongo import MongoClient
@@ -140,10 +139,7 @@ def snv_liftover(input_assembly, snv_variant):
 
 @bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
 def confirm_liftover(variant):
-  hostname = socket.gethostname()
-  user = socket.gethostbyname(hostname)
   verification_data = request.get_json(silent=True)
-  verification_data['user'] = user
   verification_data['datetime'] = datetime.datetime.now()
 
   update_record = lifto.update_one({"_id": ObjectId(variant)},
