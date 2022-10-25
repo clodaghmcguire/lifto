@@ -44,9 +44,9 @@ def snv_liftover(input_assembly, snv_variant):
   else:
     input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
 
-    existing_variant = lifto.find_one({"query": {
-      "assembly": input_assembly, "chrom": input_CHROM, "pos": input_POS, "ref": input_REF, "alt": input_ALT
-    }})
+    existing_variant = lifto.find_one({
+      "query.assembly": input_assembly, "query.chrom": input_CHROM, "query.pos": input_POS, "query.ref": input_REF, "query.alt": input_ALT
+    })
     if existing_variant:
       output = json.loads(json_util.dumps(existing_variant))
       output_json = jsonify({"data": output})
