@@ -85,6 +85,18 @@ def snv_liftover(input_assembly, snv_variant):
         CHROM, POS, REF, ALT = mapped_variant.split(":")
 
         annotation = annotate(input_assembly, snv_variant)
+        try:
+          transcript = next(iter(annotation))
+          vv_liftover = annotation[transcript]['primary_assembly_loci'][output_assembly.lower()]['vcf']
+          vv_mapping = {
+              "assembly": output_assembly,
+              "chrom": vv_liftover['chr'],
+              "pos": vv_liftover['pos'] ,
+              "ref": vv_liftover['ref'],
+              "alt": vv_liftover['alt'],
+            }
+        except:
+          vv_mapping = "no mapping provided"
 
         output = {
           "query": {
@@ -94,23 +106,26 @@ def snv_liftover(input_assembly, snv_variant):
             "ref": input_REF,
             "alt": input_ALT
           },
-          "mapping": {
-            "coordinates": {
+          "evidence": [
+            {"mapping": {
               "assembly": output_assembly,
               "chrom": CHROM,
               "pos": POS,
               "ref": REF,
               "alt": ALT,
             },
-            "meta": {
-              "source": "lifto",
-              "datetime": datetime.datetime.now()
+            "actor": "lifto",
+            "datetime": datetime.datetime.now(),
+            "meta": {}
             },
-            "evidence": {
-              "variantvalidator": annotation,
-              "datetime": datetime.datetime.now()
+            {"mapping": vv_mapping,
+            "actor": "VariantValidator",
+            "datetime": datetime.datetime.now(),
+             "meta": {
+              "variantvalidator": annotation
             }
-          },
+
+          }],
           "meta": {
             "datetime": datetime.datetime.now(),
           }
@@ -139,14 +154,17 @@ def snv_liftover(input_assembly, snv_variant):
 @bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
 def confirm_liftover(variant):
   verification_data = request.get_json(silent=True)
-  verification_data['datetime'] = datetime.datetime.now()
-
+  existing_variant = lifto.find_one({"_id": ObjectId(variant)})
   update_record = lifto.update_one({"_id": ObjectId(variant)},
-                                   {"$push":
-                                       {"mapping.verification": verification_data
-
+                                   {"$push": {
+                                     "evidence":
+                                       {"mapping": existing_variant['evidence'][0]['mapping'],
+                                        "confirm": verification_data['confirm'],
+                                        "actor": verification_data['user'],
+                                        "datetime": datetime.datetime.now(),
+                                        "meta": {"comments": verification_data['comments']}
                                         }
-                                    })
+                                    }})
   existing_variant = lifto.find_one({"_id": ObjectId(variant)})
   output_json = jsonify(json.loads(json_util.dumps(existing_variant)))
   return output_json
