@@ -48,7 +48,6 @@ def snv_liftover(input_assembly, snv_variant):
       "assembly": input_assembly, "chrom": input_CHROM, "pos": input_POS, "ref": input_REF, "alt": input_ALT
     }})
     if existing_variant:
-      print(existing_variant)
       output = json.loads(json_util.dumps(existing_variant))
       output_json = jsonify({"data": output})
 
