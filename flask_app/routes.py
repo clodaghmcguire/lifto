@@ -8,7 +8,7 @@ from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
-from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed, annotate
+from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed, annotate, validateJson
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
 db = client.flask_db
@@ -154,19 +154,26 @@ def snv_liftover(input_assembly, snv_variant):
 @bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
 def confirm_liftover(variant):
   verification_data = request.get_json(silent=True)
-  existing_variant = lifto.find_one({"_id": ObjectId(variant)})
-  update_record = lifto.update_one({"_id": ObjectId(variant)},
-                                   {"$push": {
-                                     "evidence":
-                                       {"mapping": existing_variant['evidence'][0]['mapping'],
-                                        "confirm": verification_data['confirm'],
-                                        "actor": verification_data['user'],
-                                        "datetime": datetime.datetime.now(),
-                                        "meta": {"comments": verification_data['comments']}
-                                        }
-                                    }})
-  existing_variant = lifto.find_one({"_id": ObjectId(variant)})
-  output_json = jsonify(json.loads(json_util.dumps(existing_variant)))
+  isValid = validateJson(verification_data)
+  if isValid:
+    existing_variant = lifto.find_one({"_id": ObjectId(variant)})
+    update_record = lifto.update_one({"_id": ObjectId(variant)},
+                                     {"$push": {
+                                       "evidence":
+                                         {"mapping": existing_variant['evidence'][0]['mapping'],
+                                          "confirm": verification_data['confirm'],
+                                          "actor": verification_data['user'],
+                                          "datetime": datetime.datetime.now(),
+                                          "meta": {"comments": verification_data['comments']}
+                                          }
+                                      }})
+    existing_variant = lifto.find_one({"_id": ObjectId(variant)})
+    output_json = jsonify(json.loads(json_util.dumps(existing_variant)))
+
+  else:
+    output = {"verification": verification_data,
+              "warning": "data provided in incorrect format, check jsonschema"}
+    output_json = jsonify({"data": json.loads(json_util.dumps(output))})
   return output_json
 
 

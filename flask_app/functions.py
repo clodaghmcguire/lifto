@@ -1,6 +1,9 @@
 import re
 import os
 import requests
+import json
+import jsonschema
+from jsonschema import validate
 
 def snv_format_valid(snv_variant):
   pattern = re.compile("^[0-9XYMT]{1,2}:\d+:[ACGTacgt]+:[ACGTacgt]+$")
@@ -88,3 +91,20 @@ def annotate(assembly, variant):
   url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{assembly}/{variant}/mane_select?content-type=application%2Fjson"
   response = requests.get(url)
   return response.json()
+
+
+
+liftoSchema = {
+  "type": "object",
+  "properties": {
+    "confirm": {"type": "boolean"},
+    "user": {"type": "string"},
+    "comments": {"type": "string"}
+  }
+}
+def validateJson(data):
+  try:
+    validate(instance=data, schema=liftoSchema)
+  except jsonschema.exceptions.ValidationError as err:
+    return False
+  return True
