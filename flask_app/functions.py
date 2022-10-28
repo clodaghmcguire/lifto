@@ -88,7 +88,7 @@ def annotate(assembly, variant):
     assembly = 'GRCh37'
   elif assembly.lower() in ['grch38','38']:
     assembly = 'GRCh38'
-  url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{assembly}/{variant}/mane_select?content-type=application%2Fjson"
+  url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{assembly}/{variant}/all?content-type=application%2Fjson"
   response = requests.get(url)
   return response.json()
 
