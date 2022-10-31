@@ -17,6 +17,7 @@ def approve_liftover(variant_id, confirmation, comments, user):
     response = requests.get(url, json=confirm)
     return response.json()
 
+
 if __name__ == '__main__':
     variant = input("enter variant to query [default: X:48649545:G:A]: ")
     build = input("enter genome build [default: GRCh37]: ")
