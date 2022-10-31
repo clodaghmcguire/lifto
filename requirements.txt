@@ -2,3 +2,4 @@ Flask==2.0.2
 crossmap==0.5.4
 pymongo==4.2.0
 requests==2.28.1
+jsonschema==4.16.0
