@@ -89,9 +89,12 @@ def snv_liftover(input_assembly, snv_variant):
                 CHROM, POS, REF, ALT = mapped_variant.split(":")
 
                 annotation = annotate(input_assembly, snv_variant)
+
+
                 try:
                     transcript = next(iter(annotation))
-                    vv_liftover = annotation[transcript]['primary_assembly_loci'][output_assembly.lower()]['vcf']
+                    #vv_liftover = annotation[transcript]['primary_assembly_loci'][output_assembly.lower()]['vcf']
+                    vv_liftover = [v for k, v in annotation.items() if 'primary_assembly_loci' in v][0]['primary_assembly_loci'][output_assembly.lower()]['vcf']
                     vv_mapping = {
                         "assembly": output_assembly,
                         "chrom": vv_liftover['chr'],
