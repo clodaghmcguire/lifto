@@ -88,7 +88,7 @@ def snv_liftover(input_assembly, snv_variant):
                     }
 
                 }
-                submit_query = lifto.insert_one(output)
+                lifto.insert_one(output)
                 output_json = jsonify({"data": json.loads(json_util.dumps(output))})
                 return output_json
 
@@ -110,8 +110,8 @@ def snv_liftover(input_assembly, snv_variant):
                         "ref": vv_liftover['ref'],
                         "alt": vv_liftover['alt'],
                     }
-                except:
-                    vv_mapping = "no mapping provided"
+                except Exception as e:
+                    vv_mapping = f"no mapping provided: {e}"
 
                 output = {
                     "query": {
@@ -146,7 +146,7 @@ def snv_liftover(input_assembly, snv_variant):
                     }
                 }
 
-                submit_query = lifto.insert_one(output)
+                lifto.insert_one(output)
                 output_json = jsonify({"data": json.loads(json_util.dumps(output))})
 
             else:
@@ -169,7 +169,7 @@ def snv_liftover(input_assembly, snv_variant):
                     }
                 }
 
-                submit_query = lifto.insert_one(output)
+                lifto.insert_one(output)
                 output_json = jsonify({"data": json.loads(json_util.dumps(output))})
     return output_json
 
@@ -177,10 +177,9 @@ def snv_liftover(input_assembly, snv_variant):
 @bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
 def confirm_liftover(variant):
     verification_data = request.get_json(silent=True)
-    isValid = validateJson(verification_data)
-    if isValid:
+    if validateJson(verification_data):
         existing_variant = lifto.find_one({"_id": ObjectId(variant)})
-        update_record = lifto.update_one({"_id": ObjectId(variant)},
+        lifto.update_one({"_id": ObjectId(variant)},
                                          {"$push": {
                                              "evidence":
                                                  {"mapping": existing_variant['evidence'][0]['mapping'],
