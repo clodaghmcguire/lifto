@@ -8,8 +8,8 @@ from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
-from .functions import snv_format_valid, sv_format_valid, assembly_valid, write_vcf, write_bed, read_vcf, read_bed, \
-    annotate, validateJson
+from .functions import snv_format_valid, sv_format_valid, assembly_valid, get_chain_files, write_vcf, write_bed, \
+    read_vcf, read_bed, annotate, validateJson
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
 db = client.flask_db
@@ -55,8 +55,7 @@ def snv_liftover(input_assembly, snv_variant):
             output_json = jsonify({"data": output})
 
         else:
-            output_assembly, chain_file, refgenome = assembly_valid(input_assembly)
-
+            liftover_files = get_chain_files(input_assembly)
             write_vcf(snv_variant)
 
             try:
@@ -64,10 +63,10 @@ def snv_liftover(input_assembly, snv_variant):
                 if os.path.exists(outfile):
                     os.remove(outfile)
 
-                mapTree, targetChromSizes, sourceChromSizes = read_chain_file(chain_file)
+                mapTree, targetChromSizes, sourceChromSizes = read_chain_file(liftover_files['chain_file'])
                 crossmap_vcf_file(
                     mapping=mapTree, infile="in_file.vcf",
-                    outfile=outfile, liftoverfile=chain_file, refgenome=refgenome
+                    outfile=outfile, liftoverfile=liftover_files['chain_file'], refgenome=liftover_files['refgenome']
                 )
             except Exception as e:
                 output = {"query": {
@@ -98,13 +97,10 @@ def snv_liftover(input_assembly, snv_variant):
 
                 annotation = annotate(input_assembly, snv_variant)
 
-
                 try:
-                    #transcript = next(iter(annotation))
-                    #vv_liftover = annotation[transcript]['primary_assembly_loci'][output_assembly.lower()]['vcf']
-                    vv_liftover = [v for k, v in annotation.items() if 'primary_assembly_loci' in v][0]['primary_assembly_loci'][output_assembly.lower()]['vcf']
+                    vv_liftover = [v for k, v in annotation.items() if 'primary_assembly_loci' in v][0]['primary_assembly_loci'][liftover_files['output_assembly'].lower()]['vcf']
                     vv_mapping = {
-                        "assembly": output_assembly,
+                        "assembly": liftover_files['output_assembly'],
                         "chrom": vv_liftover['chr'],
                         "pos": vv_liftover['pos'],
                         "ref": vv_liftover['ref'],
@@ -123,7 +119,7 @@ def snv_liftover(input_assembly, snv_variant):
                     },
                     "evidence": [
                         {"mapping": {
-                            "assembly": output_assembly,
+                            "assembly": liftover_files['output_assembly'],
                             "chrom": CHROM,
                             "pos": POS,
                             "ref": REF,
@@ -207,23 +203,21 @@ def sv_liftover(input_assembly, sv_input):
             "result": "FAILED",
             "output": f"Invalid input sv formatting: {sv_input}"
         }
-        output_assembly = 'n/a'
 
     elif not assembly_valid(input_assembly):
         result = {
             "result": "FAILED",
             "output": f"Invalid assembly: {input_assembly}"
         }
-        output_assembly = 'n/a'
     else:
-        output_assembly, chain_file, refgenome = assembly_valid(input_assembly)
+        liftover_files = get_chain_files(input_assembly)
         write_bed(sv_input)
 
         try:
             outfile = "out_file.bed"
             if os.path.exists(outfile):
                 os.remove(outfile)
-            mapTree, targetChromSizes, sourceChromSizes = read_chain_file(chain_file)
+            mapTree, targetChromSizes, sourceChromSizes = read_chain_file(liftover_files['chain_file'])
             crossmap_bed_file(mapping=mapTree, inbed="in_file.bed", outfile=outfile)
         except Exception as e:
             result = {
@@ -235,6 +229,7 @@ def sv_liftover(input_assembly, sv_input):
             if mapped_sv:
                 result = {
                     "result": "MAPPED",
+                    'output_assembly': liftover_files['output_assembly'],
                     "output": mapped_sv
                 }
             else:
@@ -248,7 +243,6 @@ def sv_liftover(input_assembly, sv_input):
         'data': {
             'input_assembly': input_assembly,
             'input_variant': sv_input,
-            'output_assembly': output_assembly,
             'response': result,
             'datetime': datetime.datetime.now()
         }
