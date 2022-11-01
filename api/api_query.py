@@ -15,6 +15,7 @@ def approve_liftover(variant_id, confirmation, comments, user):
                'comments': comments,
                'user': user}
     response = requests.get(url, json=confirm)
+    print(response)
     return response.json()
 
 
@@ -23,8 +24,11 @@ if __name__ == '__main__':
     build = input("enter genome build [default: GRCh37]: ")
     liftover = get_liftover(build, variant)
     print(json.dumps(liftover, indent=4))
-
-    confirmation = input("confirm liftover? [true/false]: ")
+    confirm_lifto = input("confirm liftover? [True/False]: ")
+    if confirm_lifto.lower() == "true":
+        confirmation = True
+    else:
+        confirmation = False
     comments = input("add comments: ")
     user = input("your name: ")
-    pp.pprint(approve_liftover(liftover['data']['_id']['$oid'], confirmation.lower(), comments, user))
+    pp.pprint(approve_liftover(liftover['data']['_id']['$oid'], confirmation, comments, user))
