@@ -39,7 +39,7 @@ def write_vcf(input_variant):
     CHROM, POS, REF, ALT = input_variant.split(":")
     with open(output_file, 'w') as writer:
         writer.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
-        writer.write(CHROM + "\t" + POS + "\t.\t" + REF + "\t" + ALT + "\t.\t.\t.\n")
+        writer.write(f"{CHROM}\t{POS}\t.\t{REF}\t{ALT}\t.\t.\t.\n")
     return output_file
 
 
@@ -48,7 +48,7 @@ def read_vcf(f, mapped_vcf=True):
     variant_entries = [line.strip() for line in data.readlines() if not line.startswith('#')]
     if len(variant_entries) == 1:
         variant = variant_entries[0].split("\t")
-        variant_string = (variant[0].strip('chr') + ":" + variant[1] + ":" + variant[3] + ":" + variant[4])
+        variant_string = (f"{variant[0].strip('chr')}:{variant[1]}:{variant[3]}:{variant[4]}")
         if mapped_vcf:
             return variant_string
         else:
@@ -65,7 +65,7 @@ def write_bed(input_variant):
 
     CHROM, START, END = input_variant.split(":")
     with open(output_file, 'w') as writer:
-        writer.write(CHROM + "\t" + START + "\t" + END)
+        writer.write(f"{CHROM}\t{START}\t{END}")
     return output_file
 
 
@@ -74,7 +74,7 @@ def read_bed(f, mapped_bed=True):
     line = [line.strip() for line in data.readlines() if not line.startswith('#')]
     if len(line) == 1:
         sv = line[0].split("\t")
-        sv_string = (sv[0].strip('chr') + ":" + sv[1] + ":" + sv[2])
+        sv_string = (f"{sv[0].strip('chr')}:{sv[1]}:{sv[2]}")
         if mapped_bed:
             return sv_string
         else:

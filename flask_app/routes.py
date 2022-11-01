@@ -30,7 +30,7 @@ def snv_liftover(input_assembly, snv_variant):
         output = {
             "query": {"assembly": input_assembly, "variant": snv_variant},
             "mapping": "FAILED",
-            "warning": "Invalid input variant formatting: {}".format(snv_variant),
+            "warning": f"Invalid input variant formatting: {snv_variant}",
             "datetime": datetime.datetime.now()
         }
         output_json = jsonify({"data": output})
@@ -39,7 +39,7 @@ def snv_liftover(input_assembly, snv_variant):
         output = {
             "query": {"assembly": input_assembly, "variant": snv_variant},
             "mapping": "FAILED",
-            "warning": "Invalid assembly: {}".format(input_assembly),
+            "warning": f"Invalid assembly: {input_assembly}",
             "datetime": datetime.datetime.now()
         }
         output_json = jsonify({"data": output})
@@ -81,7 +81,7 @@ def snv_liftover(input_assembly, snv_variant):
                         "mapping": "FAILED",
                         "actor": "lifto",
                         "datetime": datetime.datetime.now(),
-                        "meta": {"warning": "CROSSMAP ERROR: {}".format(e)}
+                        "meta": {"warning": f"CROSSMAP ERROR: {e}"}
                     }],
                     "meta": {
                         "datetime": datetime.datetime.now()
@@ -150,7 +150,7 @@ def snv_liftover(input_assembly, snv_variant):
                 output_json = jsonify({"data": json.loads(json_util.dumps(output))})
 
             else:
-                unmapped_variant, crossmap_error = read_vcf("{}.unmap".format(outfile), mapped_vcf=False)
+                unmapped_variant, crossmap_error = read_vcf(f"{outfile}.unmap", mapped_vcf=False)
                 output = {"query": {
                     "assembly": input_assembly,
                     "chrom": input_CHROM,
@@ -163,7 +163,7 @@ def snv_liftover(input_assembly, snv_variant):
                         "actor": "lifto",
                         "datetime": datetime.datetime.now(),
                         "meta": {
-                            "warning": "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error)}}],
+                            "warning": f"MAPPING ERROR: {unmapped_variant} {crossmap_error}"}}],
                     "meta": {
                         "datetime": datetime.datetime.now()
                     }
@@ -205,14 +205,14 @@ def sv_liftover(input_assembly, sv_input):
     if not sv_format_valid(sv_input):
         result = {
             "result": "FAILED",
-            "output": "Invalid input sv formatting: {}".format(sv_input)
+            "output": f"Invalid input sv formatting: {sv_input}"
         }
         output_assembly = 'n/a'
 
     elif not assembly_valid(input_assembly):
         result = {
             "result": "FAILED",
-            "output": "Invalid assembly: {}".format(input_assembly)
+            "output": f"Invalid assembly: {input_assembly}"
         }
         output_assembly = 'n/a'
     else:
@@ -228,7 +228,7 @@ def sv_liftover(input_assembly, sv_input):
         except Exception as e:
             result = {
                 "result": "FAILED",
-                "output": "CROSSMAP ERROR: {}".format(e)
+                "output": f"CROSSMAP ERROR: {e}"
             }
         else:
             mapped_sv = read_bed(outfile, mapped_bed=True)
@@ -238,10 +238,10 @@ def sv_liftover(input_assembly, sv_input):
                     "output": mapped_sv
                 }
             else:
-                unmapped_variant, crossmap_error = read_bed("{}.unmap".format(outfile), mapped_bed=False)
+                unmapped_variant, crossmap_error = read_bed(f"{outfile}.unmap", mapped_bed=False)
                 result = {
                     "result": "FAILED",
-                    "output": "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error)
+                    "output": f"MAPPING ERROR: {unmapped_variant} {crossmap_error}"
                 }
 
     output_json = jsonify({
