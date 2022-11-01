@@ -77,11 +77,19 @@ def snv_liftover(input_assembly, snv_variant):
                     "ref": input_REF,
                     "alt": input_ALT
                 },
-                    "mapping": "FAILED",
-                    "warning": "CROSSMAP ERROR: {}".format(e),
-                    "datetime": datetime.datetime.now()
+                    "evidence": [{
+                        "mapping": "FAILED",
+                        "actor": "lifto",
+                        "datetime": datetime.datetime.now(),
+                        "meta": {"warning": "CROSSMAP ERROR: {}".format(e)}
+                    }],
+                    "meta": {
+                        "datetime": datetime.datetime.now()
+                    }
+
                 }
-                output_json = jsonify({"data": output})
+                submit_query = lifto.insert_one(output)
+                output_json = jsonify({"data": json.loads(json_util.dumps(output))})
                 return output_json
 
             mapped_variant = read_vcf(outfile, mapped_vcf=True)
@@ -92,7 +100,7 @@ def snv_liftover(input_assembly, snv_variant):
 
 
                 try:
-                    transcript = next(iter(annotation))
+                    #transcript = next(iter(annotation))
                     #vv_liftover = annotation[transcript]['primary_assembly_loci'][output_assembly.lower()]['vcf']
                     vv_liftover = [v for k, v in annotation.items() if 'primary_assembly_loci' in v][0]['primary_assembly_loci'][output_assembly.lower()]['vcf']
                     vv_mapping = {
@@ -134,7 +142,7 @@ def snv_liftover(input_assembly, snv_variant):
 
                          }],
                     "meta": {
-                        "datetime": datetime.datetime.now(),
+                        "datetime": datetime.datetime.now()
                     }
                 }
 
@@ -150,12 +158,19 @@ def snv_liftover(input_assembly, snv_variant):
                     "ref": input_REF,
                     "alt": input_ALT
                 },
-                    "mapping": "FAILED",
-                    "warning": "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error),
-                    "datetime": datetime.datetime.now()
+                    "evidence": [{
+                        "mapping": "FAILED",
+                        "actor": "lifto",
+                        "datetime": datetime.datetime.now(),
+                        "meta": {
+                            "warning": "MAPPING ERROR: {} {}".format(unmapped_variant, crossmap_error)}}],
+                    "meta": {
+                        "datetime": datetime.datetime.now()
+                    }
                 }
 
-                output_json = jsonify({"data": output})
+                submit_query = lifto.insert_one(output)
+                output_json = jsonify({"data": json.loads(json_util.dumps(output))})
     return output_json
 
 
