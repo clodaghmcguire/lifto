@@ -29,7 +29,7 @@ def assembly_valid(input_assembly: str) -> bool:
         return False
 
 
-def get_chain_files(input_assembly: str) -> dict[str: str]:
+def get_chain_files(input_assembly: str) -> dict:
     if input_assembly.lower() == 'grch37':
         return {'output_assembly': 'GRCh38', 'chain_file': 'resources/GRCh37ToGRCh38.chain',
                 'refgenome': 'resources/grch38.fa'}
