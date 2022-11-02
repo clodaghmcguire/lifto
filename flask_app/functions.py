@@ -51,20 +51,25 @@ def write_vcf(input_variant: str) -> str:
         writer.write(f"{CHROM}\t{POS}\t.\t{REF}\t{ALT}\t.\t.\t.\n")
     return output_file
 
+def valid_vcf(f: str) -> bool:
+    with open(f, "r") as data:
+        variant_entries = [line.strip() for line in data.readlines() if not line.startswith('#')]
+        if len(variant_entries) == 1:
+            return True
+        else:
+            return False
 
-def read_vcf(f, mapped_vcf=True):
-    data = open(f, "r")
-    variant_entries = [line.strip() for line in data.readlines() if not line.startswith('#')]
-    if len(variant_entries) == 1:
+
+def read_vcf(f: str, mapped_vcf: bool) -> str:
+    with open(f, "r") as data:
+        variant_entries = [line.strip() for line in data.readlines() if not line.startswith('#')]
         variant = variant_entries[0].split("\t")
         variant_string = f"{variant[0].strip('chr')}:{variant[1]}:{variant[3]}:{variant[4]}"
         if mapped_vcf:
             return variant_string
         else:
             crossmap_error = variant[8]
-            return variant_string, crossmap_error
-    else:
-        return False
+            return f"{variant_string}: {crossmap_error}"
 
 
 def write_bed(input_variant: str) -> str:

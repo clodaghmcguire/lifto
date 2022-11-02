@@ -9,7 +9,7 @@ from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
 from .functions import snv_format_valid, sv_format_valid, assembly_valid, get_chain_files, write_vcf, write_bed, \
-    read_vcf, read_bed, annotate, validateJson
+    valid_vcf, read_vcf, read_bed, annotate, validateJson
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
 db = client.flask_db
@@ -91,8 +91,8 @@ def snv_liftover(input_assembly, snv_variant):
                 output_json = jsonify({"data": json.loads(json_util.dumps(output))})
                 return output_json
 
-            mapped_variant = read_vcf(outfile, mapped_vcf=True)
-            if mapped_variant:
+            if valid_vcf(outfile):
+                mapped_variant = read_vcf(outfile, mapped_vcf=True)
                 CHROM, POS, REF, ALT = mapped_variant.split(":")
 
                 annotation = annotate(input_assembly, snv_variant)
@@ -146,7 +146,7 @@ def snv_liftover(input_assembly, snv_variant):
                 output_json = jsonify({"data": json.loads(json_util.dumps(output))})
 
             else:
-                unmapped_variant, crossmap_error = read_vcf(f"{outfile}.unmap", mapped_vcf=False)
+                crossmap_error = read_vcf(f"{outfile}.unmap", mapped_vcf=False)
                 output = {"query": {
                     "assembly": input_assembly,
                     "chrom": input_CHROM,
@@ -159,7 +159,7 @@ def snv_liftover(input_assembly, snv_variant):
                         "actor": "lifto",
                         "datetime": datetime.datetime.now(),
                         "meta": {
-                            "warning": f"MAPPING ERROR: {unmapped_variant} {crossmap_error}"}}],
+                            "warning": f"MAPPING ERROR: {crossmap_error}"}}],
                     "meta": {
                         "datetime": datetime.datetime.now()
                     }
