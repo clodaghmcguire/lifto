@@ -24,11 +24,11 @@ if __name__ == '__main__':
     build = input("enter genome build [default: GRCh37]: ")
     liftover = get_liftover(build, variant)
     print(json.dumps(liftover, indent=4))
-    confirm_lifto = input("confirm liftover? [True/False]: ")
-    if confirm_lifto.lower() == "true":
+    confirmation = input("confirm liftover? [True/False]: ")
+    if confirmation.lower() == "true":
         confirmation = True
-    else:
+    elif confirmation.lower() == "false":
         confirmation = False
     comments = input("add comments: ")
     user = input("your name: ")
-    pp.pprint(approve_liftover(liftover['data']['_id']['$oid'], confirmation, comments, user))
+    pp.pprint(approve_liftover(liftover['data']['_id'], confirmation, comments, user))

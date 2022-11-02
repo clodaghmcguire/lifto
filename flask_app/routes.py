@@ -2,8 +2,8 @@ from flask import Blueprint, jsonify, request
 import datetime
 import os
 import json
+import uuid
 from bson import json_util
-from bson.objectid import ObjectId
 from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
@@ -33,7 +33,6 @@ def snv_liftover(input_assembly, snv_variant):
             "warning": f"Invalid input variant formatting: {snv_variant}",
             "datetime": datetime.datetime.now()
         }
-        output_json = jsonify({"data": output})
 
     elif not assembly_valid(input_assembly):
         output = {
@@ -42,7 +41,6 @@ def snv_liftover(input_assembly, snv_variant):
             "warning": f"Invalid assembly: {input_assembly}",
             "datetime": datetime.datetime.now()
         }
-        output_json = jsonify({"data": output})
     else:
         input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
 
@@ -52,7 +50,6 @@ def snv_liftover(input_assembly, snv_variant):
         })
         if existing_variant:
             output = json.loads(json_util.dumps(existing_variant))
-            output_json = jsonify({"data": output})
 
         else:
             liftover_files = get_chain_files(input_assembly)
@@ -69,7 +66,8 @@ def snv_liftover(input_assembly, snv_variant):
                     outfile=outfile, liftoverfile=liftover_files['chain_file'], refgenome=liftover_files['refgenome']
                 )
             except Exception as e:
-                output = {"query": {
+                output = {"_id": str(uuid.uuid4()),
+                    "query": {
                     "assembly": input_assembly,
                     "chrom": input_CHROM,
                     "pos": input_POS,
@@ -88,8 +86,6 @@ def snv_liftover(input_assembly, snv_variant):
 
                 }
                 lifto.insert_one(output)
-                output_json = jsonify({"data": json.loads(json_util.dumps(output))})
-                return output_json
 
             if valid_vcf(outfile):
                 mapped_variant = read_vcf(outfile, mapped_vcf=True)
@@ -109,7 +105,7 @@ def snv_liftover(input_assembly, snv_variant):
                 except Exception as e:
                     vv_mapping = f"no mapping provided: {e}"
 
-                output = {
+                output = {"_id": str(uuid.uuid4()),
                     "query": {
                         "assembly": input_assembly,
                         "chrom": input_CHROM,
@@ -143,11 +139,11 @@ def snv_liftover(input_assembly, snv_variant):
                 }
 
                 lifto.insert_one(output)
-                output_json = jsonify({"data": json.loads(json_util.dumps(output))})
 
             else:
                 crossmap_error = read_vcf(f"{outfile}.unmap", mapped_vcf=False)
-                output = {"query": {
+                output = {"_id": str(uuid.uuid4()),
+                    "query": {
                     "assembly": input_assembly,
                     "chrom": input_CHROM,
                     "pos": input_POS,
@@ -166,7 +162,7 @@ def snv_liftover(input_assembly, snv_variant):
                 }
 
                 lifto.insert_one(output)
-                output_json = jsonify({"data": json.loads(json_util.dumps(output))})
+    output_json = jsonify({"data": output})
     return output_json
 
 
@@ -174,8 +170,8 @@ def snv_liftover(input_assembly, snv_variant):
 def confirm_liftover(variant):
     verification_data = request.get_json(silent=True)
     if validateJson(verification_data):
-        existing_variant = lifto.find_one({"_id": ObjectId(variant)})
-        lifto.update_one({"_id": ObjectId(variant)},
+        existing_variant = lifto.find_one({"_id": variant})
+        lifto.update_one({"_id": variant},
                                          {"$push": {
                                              "evidence":
                                                  {"mapping": existing_variant['evidence'][0]['mapping'],
@@ -185,8 +181,8 @@ def confirm_liftover(variant):
                                                   "meta": {"comments": verification_data['comments']}
                                                   }
                                          }})
-        existing_variant = lifto.find_one({"_id": ObjectId(variant)})
-        output_json = jsonify(json.loads(json_util.dumps(existing_variant)))
+        updated_variant = lifto.find_one({"_id": variant})
+        output_json = jsonify(json.loads(json_util.dumps(updated_variant)))
 
     else:
         output = {"verification": verification_data,
