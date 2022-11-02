@@ -9,7 +9,7 @@ from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
 from .functions import snv_format_valid, sv_format_valid, assembly_valid, get_chain_files, write_vcf, write_bed, \
-    valid_vcf, read_vcf, read_bed, annotate, validateJson
+    valid_vcf, read_vcf, valid_bed, read_bed, annotate, validateJson
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
 db = client.flask_db
@@ -225,18 +225,18 @@ def sv_liftover(input_assembly, sv_input):
                 "output": f"CROSSMAP ERROR: {e}"
             }
         else:
-            mapped_sv = read_bed(outfile, mapped_bed=True)
-            if mapped_sv:
+            if valid_bed(outfile):
+                mapped_sv = read_bed(outfile, mapped_bed=True)
                 result = {
                     "result": "MAPPED",
                     'output_assembly': liftover_files['output_assembly'],
                     "output": mapped_sv
                 }
             else:
-                unmapped_variant, crossmap_error = read_bed(f"{outfile}.unmap", mapped_bed=False)
+                crossmap_error = read_bed(f"{outfile}.unmap", mapped_bed=False)
                 result = {
                     "result": "FAILED",
-                    "output": f"MAPPING ERROR: {unmapped_variant} {crossmap_error}"
+                    "output": f"MAPPING ERROR: {crossmap_error}"
                 }
 
     output_json = jsonify({

@@ -51,6 +51,7 @@ def write_vcf(input_variant: str) -> str:
         writer.write(f"{CHROM}\t{POS}\t.\t{REF}\t{ALT}\t.\t.\t.\n")
     return output_file
 
+
 def valid_vcf(f: str) -> bool:
     with open(f, "r") as data:
         variant_entries = [line.strip() for line in data.readlines() if not line.startswith('#')]
@@ -83,19 +84,25 @@ def write_bed(input_variant: str) -> str:
     return output_file
 
 
-def read_bed(f, mapped_bed=True):
-    data = open(f, "r")
-    line = [line.strip() for line in data.readlines() if not line.startswith('#')]
-    if len(line) == 1:
+def valid_bed(f: str) -> bool:
+    with open(f, "r") as data:
+        line = [line.strip() for line in data.readlines() if not line.startswith('#')]
+        if len(line) == 1:
+            return True
+        else:
+            return False
+
+
+def read_bed(f: str, mapped_bed: bool) -> str:
+    with open(f, "r") as data:
+        line = [line.strip() for line in data.readlines() if not line.startswith('#')]
         sv = line[0].split("\t")
         sv_string = f"{sv[0].strip('chr')}:{sv[1]}:{sv[2]}"
         if mapped_bed:
             return sv_string
         else:
             crossmap_error = sv[3]
-            return sv_string, crossmap_error
-    else:
-        return False
+            return f"{sv_string}: {crossmap_error}"
 
 
 def annotate(assembly: str, variant: str):
