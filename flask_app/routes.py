@@ -31,7 +31,7 @@ def snv_liftover(input_assembly, snv_variant):
             "query": {"assembly": input_assembly, "variant": snv_variant},
             "mapping": "FAILED",
             "warning": f"Invalid input variant formatting: {snv_variant}",
-            "datetime": datetime.datetime.now()
+            "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
         }
 
     elif not assembly_valid(input_assembly):
@@ -39,7 +39,7 @@ def snv_liftover(input_assembly, snv_variant):
             "query": {"assembly": input_assembly, "variant": snv_variant},
             "mapping": "FAILED",
             "warning": f"Invalid assembly: {input_assembly}",
-            "datetime": datetime.datetime.now()
+            "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
         }
     else:
         input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
@@ -77,11 +77,11 @@ def snv_liftover(input_assembly, snv_variant):
                     "evidence": [{
                         "mapping": "FAILED",
                         "actor": "lifto",
-                        "datetime": datetime.datetime.now(),
+                        "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                         "meta": {"warning": f"CROSSMAP ERROR: {e}"}
                     }],
                     "meta": {
-                        "datetime": datetime.datetime.now()
+                        "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                     }
 
                 }
@@ -122,19 +122,19 @@ def snv_liftover(input_assembly, snv_variant):
                             "alt": ALT,
                         },
                             "actor": "lifto",
-                            "datetime": datetime.datetime.now(),
+                            "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                             "meta": {}
                         },
                         {"mapping": vv_mapping,
                          "actor": "VariantValidator",
-                         "datetime": datetime.datetime.now(),
+                         "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                          "meta": {
                              "variantvalidator": annotation
                          }
 
                          }],
                     "meta": {
-                        "datetime": datetime.datetime.now()
+                        "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                     }
                 }
 
@@ -153,11 +153,11 @@ def snv_liftover(input_assembly, snv_variant):
                     "evidence": [{
                         "mapping": "FAILED",
                         "actor": "lifto",
-                        "datetime": datetime.datetime.now(),
+                        "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                         "meta": {
                             "warning": f"MAPPING ERROR: {crossmap_error}"}}],
                     "meta": {
-                        "datetime": datetime.datetime.now()
+                        "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                     }
                 }
 
@@ -177,7 +177,7 @@ def confirm_liftover(variant):
                                                  {"mapping": existing_variant['evidence'][0]['mapping'],
                                                   "confirm": verification_data['confirm'],
                                                   "actor": verification_data['user'],
-                                                  "datetime": datetime.datetime.now(),
+                                                  "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                                                   "meta": {"comments": verification_data['comments']}
                                                   }
                                          }})
