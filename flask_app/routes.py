@@ -8,8 +8,8 @@ from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
-from .functions import snv_format_valid, sv_format_valid, assembly_valid, get_chain_files, write_vcf, write_bed, \
-    valid_vcf, read_vcf, valid_bed, read_bed, annotate, validateJson
+from .functions import snv_format_valid, sv_format_valid, assembly_valid, normalise_assembly, get_chain_files, \
+    write_vcf, write_bed, valid_vcf, read_vcf, valid_bed, read_bed, annotate, validateJson
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
 db = client.flask_db
@@ -43,6 +43,7 @@ def snv_liftover(input_assembly, snv_variant):
         }
     else:
         input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
+        input_assembly = normalise_assembly(input_assembly)
 
         existing_variant = lifto.find_one({
             "query.assembly": input_assembly, "query.chrom": input_CHROM, "query.pos": input_POS,

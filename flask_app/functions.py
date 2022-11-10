@@ -29,6 +29,14 @@ def assembly_valid(input_assembly: str) -> bool:
         return False
 
 
+def normalise_assembly(input_assembly: str) -> str:
+    if input_assembly.lower() == 'grch37':
+        return 'GRCh37'
+    elif input_assembly.lower() == 'grch38':
+        return 'GRCh38'
+    else:
+        raise Exception(f"Invalid assessmbly {input_assembly}")
+
 def get_chain_files(input_assembly: str) -> dict:
     if input_assembly.lower() == 'grch37':
         return {'output_assembly': 'GRCh38', 'chain_file': 'resources/GRCh37ToGRCh38.chain',
@@ -106,11 +114,7 @@ def read_bed(f: str, mapped_bed: bool) -> str:
 
 
 def annotate(assembly: str, variant: str):
-    if assembly.lower() in ['grch37', '37']:
-        assembly = 'GRCh37'
-    elif assembly.lower() in ['grch38', '38']:
-        assembly = 'GRCh38'
-    url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{assembly}/{variant}/all?content-type=application%2Fjson"
+    url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{normalise_assembly(assembly)}/{variant}/all?content-type=application%2Fjson"
     response = requests.get(url)
     return response.json()
 
