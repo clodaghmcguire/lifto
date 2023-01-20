@@ -92,20 +92,6 @@ def snv_liftover(input_assembly, snv_variant):
                 mapped_variant = read_vcf(outfile, mapped_vcf=True)
                 CHROM, POS, REF, ALT = mapped_variant.split(":")
 
-                annotation = annotate(input_assembly, snv_variant)
-
-                try:
-                    vv_liftover = [v for k, v in annotation.items() if 'primary_assembly_loci' in v][0]['primary_assembly_loci'][liftover_files['output_assembly'].lower()]['vcf']
-                    vv_mapping = {
-                        "assembly": liftover_files['output_assembly'],
-                        "chrom": vv_liftover['chr'],
-                        "pos": vv_liftover['pos'],
-                        "ref": vv_liftover['ref'],
-                        "alt": vv_liftover['alt'],
-                    }
-                except Exception as e:
-                    vv_mapping = f"no mapping provided: {e}"
-
                 output = {"_id": str(uuid.uuid4()),
                     "query": {
                         "assembly": input_assembly,
@@ -125,20 +111,37 @@ def snv_liftover(input_assembly, snv_variant):
                             "actor": "lifto",
                             "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                             "meta": {}
-                        },
-                        {"mapping": vv_mapping,
-                         "actor": "VariantValidator",
-                         "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
-                         "meta": {
-                             "variantvalidator": annotation
-                         }
-
-                         }],
+                        }
+                        ],
                     "meta": {
                         "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                     }
                 }
 
+                annotation = annotate(input_assembly, snv_variant)
+
+                if annotation:
+                    try:
+                        vv_liftover = \
+                        [v for k, v in annotation.items() if 'primary_assembly_loci' in v][0]['primary_assembly_loci'][
+                            liftover_files['output_assembly'].lower()]['vcf']
+                        vv_mapping = {
+                            "assembly": liftover_files['output_assembly'],
+                            "chrom": vv_liftover['chr'],
+                            "pos": vv_liftover['pos'],
+                            "ref": vv_liftover['ref'],
+                            "alt": vv_liftover['alt'],
+                        }
+                    except Exception as e:
+                        vv_mapping = f"no mapping provided: {e}"
+                    vv_annotation = {"mapping": vv_mapping,
+                         "actor": "VariantValidator",
+                         "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
+                         "meta": {
+                             "variantvalidator": annotation
+                         }
+                         }
+                    output['evidence'].append(vv_annotation)
                 lifto.insert_one(output)
 
             else:
