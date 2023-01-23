@@ -186,7 +186,7 @@ def confirm_liftover(variant):
                                                   }
                                          }})
         updated_variant = lifto.find_one({"_id": variant})
-        output_json = jsonify(json.loads(json_util.dumps(updated_variant)))
+        output_json = jsonify({"data": json.loads(json_util.dumps(updated_variant))})
 
     else:
         output = {"verification": verification_data,
