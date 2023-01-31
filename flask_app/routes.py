@@ -9,7 +9,8 @@ from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
 from .functions import snv_format_valid, sv_format_valid, assembly_valid, normalise_assembly, get_chain_files, \
-    write_vcf, write_bed, valid_vcf, read_vcf, valid_bed, read_bed, annotate, validateJson
+    write_vcf, write_bed, valid_vcf, read_vcf, valid_bed, read_bed, annotate, validateJson, token_required
+
 bp = Blueprint('auth', __name__, url_prefix='')
 client = MongoClient('localhost', 27017)
 db = client.flask_db
@@ -171,7 +172,10 @@ def snv_liftover(input_assembly, snv_variant):
 
 
 @bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
-def confirm_liftover(variant):
+@token_required
+def confirm_liftover(user, variant):
+    print(variant)
+    print(user)
     verification_data = request.get_json(silent=True)
     if validateJson(verification_data):
         existing_variant = lifto.find_one({"_id": variant})
@@ -180,7 +184,7 @@ def confirm_liftover(variant):
                                              "evidence":
                                                  {"mapping": existing_variant['evidence'][0]['mapping'],
                                                   "confirm": verification_data['confirm'],
-                                                  "actor": verification_data['user'],
+                                                  "actor": f"{next(iter(user))} user {verification_data['user']}",
                                                   "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                                                   "meta": {"comments": verification_data['comments']}
                                                   }
