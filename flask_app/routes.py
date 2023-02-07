@@ -176,9 +176,7 @@ def snv_liftover(input_assembly, snv_variant):
 
 @bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
 @token_required
-def confirm_liftover(user, variant):
-    print(variant)
-    print(user)
+def confirm_liftover(token, variant):
     verification_data = request.get_json(silent=True)
     if validateJson(verification_data):
         existing_variant = lifto.find_one({"_id": variant})
@@ -187,7 +185,7 @@ def confirm_liftover(user, variant):
                                              "evidence":
                                                  {"mapping": existing_variant['evidence'][0]['mapping'],
                                                   "confirm": verification_data['confirm'],
-                                                  "actor": f"{next(iter(user))} user {verification_data['user']}",
+                                                  "actor": f"{token['sub']} user {verification_data['user']}",
                                                   "datetime": datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
                                                   "meta": {"comments": verification_data['comments']}
                                                   }

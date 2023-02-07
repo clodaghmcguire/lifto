@@ -10,11 +10,12 @@ def get_liftover(build, variant):
 
 
 def approve_liftover(variant_id, confirmation, comments, user):
+    token = b'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzU3ODkxNjAsInN1YiI6InZhc2EifQ.UYWg5xw4UBXbvX27WnkkIay5Uia0ktYJMG5Kw40fmS4'
     url = f"http://127.0.0.1:5000/api/v1/{variant_id}/"
     confirm = {'confirm': confirmation,
                'comments': comments,
                'user': user}
-    response = requests.get(url, json=confirm)
+    response = requests.get(url, json=confirm, headers={'x-access-token': token})
     print(response)
     return response.json()
 

@@ -20,7 +20,6 @@ def token_required(f):
             return make_response(jsonify({"message": "A valid token is missing!"}), 401)
         try:
            # decode the token to obtain user public_id
-            secret = current_app.config['SECRET_KEY']
             current_user = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
         except:
             return make_response(jsonify({"message": "Invalid token!"}), 401)
