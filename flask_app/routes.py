@@ -11,8 +11,11 @@ from cmmodule.mapbed import crossmap_bed_file
 from .functions import snv_format_valid, sv_format_valid, assembly_valid, normalise_assembly, get_chain_files, \
     write_vcf, write_bed, valid_vcf, read_vcf, valid_bed, read_bed, annotate, validateJson, token_required
 
+
+DB_HOST = os.getenv('DB_HOST', 'localhost')
 bp = Blueprint('auth', __name__, url_prefix='')
-client = MongoClient('localhost', 27017)
+client = MongoClient(host=DB_HOST,
+          port=27017)
 db = client.flask_db
 lifto = db.lifto
 
