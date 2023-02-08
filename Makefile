@@ -61,6 +61,6 @@ move_files:
 	mkdir -p resources
 	mv *.chain *.chain.gz *.fa resources
 
-BuildDocker:
-	docker build . -t kingspm/lifto:0.1
-	docker push kingspm/lifto:0.1
+# BuildDocker:
+# 	docker build . -t kingspm/lifto:0.1
+# 	docker push kingspm/lifto:0.1
