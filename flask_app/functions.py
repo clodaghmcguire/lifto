@@ -1,7 +1,6 @@
 import re
 import os
 import requests
-import json
 import jsonschema
 from jsonschema import validate
 import jwt
@@ -59,13 +58,20 @@ def normalise_assembly(input_assembly: str) -> str:
     else:
         raise Exception(f"Invalid assessmbly {input_assembly}")
 
+
 def get_chain_files(input_assembly: str) -> dict:
     if input_assembly.lower() == 'grch37':
-        return {'output_assembly': 'GRCh38', 'chain_file': '/resources/GRCh37ToGRCh38.chain',
-                'refgenome': '/resources/grch38.fa'}
+        return {
+            'output_assembly': 'GRCh38',
+            'chain_file': '/resources/GRCh37ToGRCh38.chain',
+            'refgenome': '/resources/grch38.fa'
+            }
     elif input_assembly.lower() == 'grch38':
-        return {'output_assembly': 'GRCh37', 'chain_file': '/resources/GRCh38ToGRCh37.chain',
-                'refgenome': '/resources/grch37.fa'}
+        return {
+            'output_assembly': 'GRCh37',
+            'chain_file': '/resources/GRCh38ToGRCh37.chain',
+            'refgenome': '/resources/grch37.fa'
+            }
     else:
         raise Exception(f"No chain files found for {input_assembly}")
 

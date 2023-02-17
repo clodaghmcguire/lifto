@@ -14,8 +14,7 @@ from .functions import snv_format_valid, sv_format_valid, assembly_valid, normal
 
 DB_HOST = os.getenv('DB_HOST', 'localhost')
 bp = Blueprint('auth', __name__, url_prefix='')
-client = MongoClient(host=DB_HOST,
-          port=27017)
+client = MongoClient(host=DB_HOST, port=27017)
 db = client.flask_db
 lifto = db.lifto
 
@@ -23,8 +22,7 @@ lifto = db.lifto
 @bp.route('/', methods=['GET'])
 def home():
     return "<h1>SEGLH Lift Over API</h1>\
-      <p>See <a href='https://git.kingspm.uk/SEGLH/lifto/src/branch/develop'>\
-      https://git.kingspm.uk/SEGLH/lifto/src/branch/develop</a> for more info.</p>"
+            <p>See <a href='https://git.kingspm.uk/SEGLH/lifto/'>https://git.kingspm.uk/SEGLH/lifto</a> for more info.</p>"
 
 
 @bp.route('/api/v1/snv/<input_assembly>/<snv_variant>', methods=(['GET']))
@@ -34,16 +32,14 @@ def snv_liftover(input_assembly, snv_variant):
         output = {
             "query": {"assembly": input_assembly, "variant": snv_variant},
             "mapping": "FAILED",
-            "warning": f"Invalid input variant formatting: {snv_variant}",
-            "datetime": datetime.datetime.now().strftime("%Y-%m-%d")
+            "warning": f"Invalid input variant formatting: {snv_variant}"
         }
 
     elif not assembly_valid(input_assembly):
         output = {
             "query": {"assembly": input_assembly, "variant": snv_variant},
             "mapping": "FAILED",
-            "warning": f"Invalid assembly: {input_assembly}",
-            "datetime": datetime.datetime.now().strftime("%Y-%m-%d")
+            "warning": f"Invalid assembly: {input_assembly}"
         }
     else:
         input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
@@ -82,15 +78,11 @@ def snv_liftover(input_assembly, snv_variant):
                     "evidence": [{
                         "mapping": "FAILED",
                         "actor": "lifto",
-                        "datetime": datetime.datetime.now().strftime("%Y-%m-%d"),
+                        "datetime": datetime.datetime.now().isoformat(),
                         "meta": {"warning": f"CROSSMAP ERROR: {e}"}
-                    }],
-                    "meta": {
-                        "datetime": datetime.datetime.now().strftime("%Y-%m-%d")
-                    }
-
+                    }]
                 }
-                lifto.insert_one(output)
+                # lifto.insert_one(output)  ## TODO: Should a failure be cached?
 
             if valid_vcf(outfile):
                 mapped_variant = read_vcf(outfile, mapped_vcf=True)
@@ -113,13 +105,12 @@ def snv_liftover(input_assembly, snv_variant):
                             "alt": ALT,
                         },
                             "actor": "lifto",
-                            "datetime": datetime.datetime.now().strftime("%Y-%m-%d"),
+                            "datetime": datetime.datetime.now().isoformat(),
                             "meta": {}
                         }
                         ],
-                    "meta": {
-                        "datetime": datetime.datetime.now().strftime("%Y-%m-%d")
-                    }
+                    "record_created": datetime.datetime.now().isoformat(),
+                    "record_modified": datetime.datetime.now().isoformat()
                 }
 
                 annotation = annotate(input_assembly, snv_variant)
@@ -140,12 +131,13 @@ def snv_liftover(input_assembly, snv_variant):
                         vv_mapping = f"no mapping provided: {e}"
                     vv_annotation = {"mapping": vv_mapping,
                          "actor": "VariantValidator",
-                         "datetime": datetime.datetime.now().strftime("%Y-%m-%d"),
+                         "datetime": datetime.datetime.now().isoformat(),
                          "meta": {
                              "variantvalidator": annotation
                          }
                          }
                     output['evidence'].append(vv_annotation)
+                    output['record_modified'] = datetime.datetime.now().isoformat()
                 lifto.insert_one(output)
 
             else:
@@ -161,15 +153,14 @@ def snv_liftover(input_assembly, snv_variant):
                     "evidence": [{
                         "mapping": "FAILED",
                         "actor": "lifto",
-                        "datetime": datetime.datetime.now().strftime("%Y-%m-%d"),
+                        "datetime": datetime.datetime.now().isoformat(),
                         "meta": {
-                            "warning": f"MAPPING ERROR: {crossmap_error}"}}],
-                    "meta": {
-                        "datetime": datetime.datetime.now().strftime("%Y-%m-%d")
-                    }
+                            "warning": f"MAPPING ERROR: {crossmap_error}"
+                        }
+                    }]
                 }
 
-                lifto.insert_one(output)
+                # lifto.insert_one(output)  # Should this be cached?
     output_json = jsonify({"data": output})
     return output_json
 
@@ -180,16 +171,19 @@ def confirm_liftover(token, variant):
     verification_data = request.get_json(silent=True)
     if validateJson(verification_data):
         existing_variant = lifto.find_one({"_id": variant})
-        lifto.update_one({"_id": variant},
-                                         {"$push": {
-                                             "evidence":
-                                                 {"mapping": existing_variant['evidence'][0]['mapping'],
-                                                  "confirm": verification_data['confirm'],
-                                                  "actor": f"{token['sub']} user {verification_data['user']}",
-                                                  "datetime": datetime.datetime.now().strftime("%Y-%m-%d"),
-                                                  "meta": {"comments": verification_data['comments']}
-                                                  }
-                                         }})
+        lifto.update_one(
+            {"_id": variant},
+            {"$push": {
+                "evidence":
+                    {"mapping": existing_variant['evidence'][0]['mapping'],
+                    "confirm": verification_data['confirm'],
+                    "actor": f"{token['sub']} user {verification_data['user']}",
+                    "datetime": datetime.datetime.now().isoformat(),
+                    "meta": {"comments": verification_data['comments']}
+                    },
+                "record_modified": datetime.datetime.now().isoformat()
+                }}
+            )
         updated_variant = lifto.find_one({"_id": variant})
         output_json = jsonify({"data": json.loads(json_util.dumps(updated_variant))})
 
@@ -249,7 +243,7 @@ def sv_liftover(input_assembly, sv_input):
             'input_assembly': input_assembly,
             'input_variant': sv_input,
             'response': result,
-            'datetime': datetime.datetime.now().strftime("%Y-%m-%d")
+            'datetime': datetime.datetime.now().isoformat()
         }
     })
 
