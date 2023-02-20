@@ -173,15 +173,18 @@ def confirm_liftover(token, variant):
         existing_variant = lifto.find_one({"_id": variant})
         lifto.update_one(
             {"_id": variant},
-            {"$push": {
-                "evidence":
-                    {"mapping": existing_variant['evidence'][0]['mapping'],
-                    "confirm": verification_data['confirm'],
-                    "actor": f"{token['sub']} user {verification_data['user']}",
-                    "datetime": datetime.datetime.now().isoformat(),
-                    "meta": {"comments": verification_data['comments']}
-                    },
-                "record_modified": datetime.datetime.now().isoformat()
+            {
+                "$push": {
+                    "evidence":
+                        {"mapping": existing_variant['evidence'][0]['mapping'],
+                        "confirm": verification_data['confirm'],
+                        "actor": f"{token['sub']} user {verification_data['user']}",
+                        "datetime": datetime.datetime.now().isoformat(),
+                        "meta": {"comments": verification_data['comments']}
+                         }
+                },
+                "$set": {
+                    "record_modified": datetime.datetime.now().isoformat()
                 }}
             )
         updated_variant = lifto.find_one({"_id": variant})

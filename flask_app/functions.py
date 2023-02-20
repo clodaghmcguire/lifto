@@ -56,7 +56,7 @@ def normalise_assembly(input_assembly: str) -> str:
     elif input_assembly.lower() == 'grch38':
         return 'GRCh38'
     else:
-        raise Exception(f"Invalid assessmbly {input_assembly}")
+        raise Exception(f"Invalid assembly {input_assembly}")
 
 
 def get_chain_files(input_assembly: str) -> dict:
