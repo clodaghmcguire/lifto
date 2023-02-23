@@ -1,3 +1,13 @@
+# Repo specific
+resources
+*.chain
+*.chain.gz
+*.fa
+client_examples
+in_file.*
+out_file.*
+mongo_data/
+
 # ---> Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
