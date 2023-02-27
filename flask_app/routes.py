@@ -25,7 +25,7 @@ def home():
             <p>See <a href='https://git.kingspm.uk/SEGLH/lifto/'>https://git.kingspm.uk/SEGLH/lifto</a> for more info.</p>"
 
 
-@bp.route('/api/v1/snv/<input_assembly>/<snv_variant>', methods=(['GET']))
+@bp.route('/api/v1/get_liftover/snv/<input_assembly>/<snv_variant>', methods=(['GET']))
 def snv_liftover(input_assembly, snv_variant):
 
     if not snv_format_valid(snv_variant):
@@ -165,7 +165,7 @@ def snv_liftover(input_assembly, snv_variant):
     return output_json
 
 
-@bp.route('/api/v1/<variant>/', methods=(['GET', 'POST']))
+@bp.route('/api/v1/confirm_liftover/snv/<variant>/', methods=(['GET', 'POST']))
 @token_required
 def confirm_liftover(token, variant):
     verification_data = request.get_json(silent=True)
@@ -197,57 +197,57 @@ def confirm_liftover(token, variant):
     return output_json
 
 
-@bp.route('/api/v1/sv/<input_assembly>/<sv_input>', methods=(['GET']))
-def sv_liftover(input_assembly, sv_input):
-
-    if not sv_format_valid(sv_input):
-        result = {
-            "result": "FAILED",
-            "output": f"Invalid input sv formatting: {sv_input}"
-        }
-
-    elif not assembly_valid(input_assembly):
-        result = {
-            "result": "FAILED",
-            "output": f"Invalid assembly: {input_assembly}"
-        }
-    else:
-        liftover_files = get_chain_files(input_assembly)
-        write_bed(sv_input)
-
-        try:
-            outfile = "out_file.bed"
-            if os.path.exists(outfile):
-                os.remove(outfile)
-            mapTree, targetChromSizes, sourceChromSizes = read_chain_file(liftover_files['chain_file'])
-            crossmap_bed_file(mapping=mapTree, inbed="in_file.bed", outfile=outfile)
-        except Exception as e:
-            result = {
-                "result": "FAILED",
-                "output": f"CROSSMAP ERROR: {e}"
-            }
-        else:
-            if valid_bed(outfile):
-                mapped_sv = read_bed(outfile, mapped_bed=True)
-                result = {
-                    "result": "MAPPED",
-                    'output_assembly': liftover_files['output_assembly'],
-                    "output": mapped_sv
-                }
-            else:
-                crossmap_error = read_bed(f"{outfile}.unmap", mapped_bed=False)
-                result = {
-                    "result": "FAILED",
-                    "output": f"MAPPING ERROR: {crossmap_error}"
-                }
-
-    output_json = jsonify({
-        'data': {
-            'input_assembly': input_assembly,
-            'input_variant': sv_input,
-            'response': result,
-            'datetime': datetime.datetime.now().isoformat()
-        }
-    })
-
-    return output_json
+# @bp.route('/api/v1/get_liftover/sv/<input_assembly>/<sv_input>', methods=(['GET']))
+# def sv_liftover(input_assembly, sv_input):
+#
+#     if not sv_format_valid(sv_input):
+#         result = {
+#             "result": "FAILED",
+#             "output": f"Invalid input sv formatting: {sv_input}"
+#         }
+#
+#     elif not assembly_valid(input_assembly):
+#         result = {
+#             "result": "FAILED",
+#             "output": f"Invalid assembly: {input_assembly}"
+#         }
+#     else:
+#         liftover_files = get_chain_files(input_assembly)
+#         write_bed(sv_input)
+#
+#         try:
+#             outfile = "out_file.bed"
+#             if os.path.exists(outfile):
+#                 os.remove(outfile)
+#             mapTree, targetChromSizes, sourceChromSizes = read_chain_file(liftover_files['chain_file'])
+#             crossmap_bed_file(mapping=mapTree, inbed="in_file.bed", outfile=outfile)
+#         except Exception as e:
+#             result = {
+#                 "result": "FAILED",
+#                 "output": f"CROSSMAP ERROR: {e}"
+#             }
+#         else:
+#             if valid_bed(outfile):
+#                 mapped_sv = read_bed(outfile, mapped_bed=True)
+#                 result = {
+#                     "result": "MAPPED",
+#                     'output_assembly': liftover_files['output_assembly'],
+#                     "output": mapped_sv
+#                 }
+#             else:
+#                 crossmap_error = read_bed(f"{outfile}.unmap", mapped_bed=False)
+#                 result = {
+#                     "result": "FAILED",
+#                     "output": f"MAPPING ERROR: {crossmap_error}"
+#                 }
+#
+#     output_json = jsonify({
+#         'data': {
+#             'input_assembly': input_assembly,
+#             'input_variant': sv_input,
+#             'response': result,
+#             'datetime': datetime.datetime.now().isoformat()
+#         }
+#     })
+#
+#     return output_json

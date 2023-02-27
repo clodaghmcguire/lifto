@@ -4,14 +4,14 @@ import pprint as pp
 
 
 def get_liftover(build, variant):
-    url = f"http://127.0.0.1:5000/api/v1/snv/{build}/{variant}"
+    url = f"http://127.0.0.1:5000/api/v1/get_liftover/snv/{build}/{variant}"
     response = requests.get(url)
     return response.json()
 
 
 def approve_liftover(variant_id, confirmation, comments, user):
     token = b'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzU3ODkxNjAsInN1YiI6InZhc2EifQ.UYWg5xw4UBXbvX27WnkkIay5Uia0ktYJMG5Kw40fmS4'
-    url = f"http://127.0.0.1:5000/api/v1/{variant_id}/"
+    url = f"http://127.0.0.1:5000/api/v1/confirm_liftover/snv/{variant_id}/"
     confirm = {'confirm': confirmation,
                'comments': comments,
                'user': user}
