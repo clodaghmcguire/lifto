@@ -3,32 +3,49 @@
 Uses Python Crossmap library from https://crossmap.readthedocs.io/
 
 ### SNV Liftover Endpoint
-Simple query at: http://[server]/api/v1/snv/[input_assembly]/[input_variant]
+Simple query at: http://[server]/api/v1/get_liftover/snv/[input_assembly]/[input_variant]
 
-eg: http://localhost:5000/api/v1/snv/grch37/1:55516888:A:T
+eg: http://localhost:5000/api/v1/snv/grch37/11:5247992:C:A"
 
 
-### Region (e.g SV) Liftover Endpoint
-Simple query at: http://[server]/api/v1/sv/[input_assembly]/[chr]:[start]:[end]
-
-eg: http://localhost:5000/api/v1/sv/grch37/1:55516888:55517999
-
-### Output:
+#### Output:
 
 ```
 {
   "data": {
-    "datetime": "Wed, 24 Nov 2021 16:35:22 GMT", 
-    "input_assembly": "[grch37|grch38]", 
-    "input_variant": "1:55516N888:G:A", 
-    "output_assembly": "[grch38|grch37]", 
-    "response": {
-      "output": "[ Mapped result | Error message ]", 
-      "result": "[ MAPPED | FAILED ]"
-    }
+    "_id": "538cda30-88dd-4d3f-ba4b-cad1bf0c2b03", 
+    "query": {
+      "assembly": "GRCh37", 
+      "chrom": "11", 
+      "pos": "5247992", 
+      "ref": "C", 
+      "alt": "A"
+    }, 
+    "evidence": [
+      {
+        "mapping": {
+          "assembly": "GRCh38", 
+          "chrom": "11", 
+          "pos": "5226762", 
+          "ref": "C", 
+          "alt": "A"
+        }, 
+        "actor": "lifto", 
+        "datetime": "2023-02-17", 
+        "meta": {}
+      }
+    ],
+    "record_created": "2023-03-02T15:31:42.417468", 
+    "record_modified": "2023-03-02T15:31:43.918932"
   }
 }
 ```
+
+### Confirm SNV Liftover endpoint
+Confirm or contest a liftover by making a post request to http://[server]/api/v1/confirm_liftover/snv/[variant_id]
+Variant_id is the '_id' for the variant record, obtained from the SNV Liftover endpoint.
+Authorization token required.
+Confirmation data should include a confirmation, username and comments provided in json format. Example query provided in api/api_query.py
 
 ## Install/run
 
@@ -44,14 +61,18 @@ Create development Mongo database
 ```commandline
 mkdir mongo_data
 chmod 777 -R mongo_data
-sudo docker-compose up -d
+sudo docker-compose -f docker-compose-dev.yml up -d
 ```
 
 Run flask in virtual environment
+
+Check path to resources folder in get_chain_files() in flask_app/functions.py points to correct location and update if needed
 ```commandline
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
 export FLASK_APP=flask_app
+export SECRET_KEY="Th1s1sAS3cr3t"
+export FLASK_DEBUG=1
 flask run
 ```

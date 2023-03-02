@@ -3,19 +3,25 @@ import json
 import pprint as pp
 
 
-def get_liftover(build, variant):
+def get_liftover(build: str, variant: str):
     url = f"http://127.0.0.1:5000/api/v1/get_liftover/snv/{build}/{variant}"
     response = requests.get(url)
     return response.json()
 
 
-def approve_liftover(variant_id, confirmation, comments, user):
-    token = b'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzU3ODkxNjAsInN1YiI6InZhc2EifQ.UYWg5xw4UBXbvX27WnkkIay5Uia0ktYJMG5Kw40fmS4'
+def approve_liftover(variant_id: str, confirmation: bool, comments: str, user: str):
+    """
+    :param variant_id: _id for variant record, obtained from get_liftover query
+    :param confirmation: Boolean
+    :param comments: String
+    :param user: String
+    """
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzc3NzMxNDcsInN1YiI6InZhc2EifQ.dv2NqnLqhOkJ6d4Q30lllazTU-JlcRMAWvvnAzspkE0'
     url = f"http://127.0.0.1:5000/api/v1/confirm_liftover/snv/{variant_id}/"
     confirm = {'confirm': confirmation,
                'comments': comments,
                'user': user}
-    response = requests.get(url, json=confirm, headers={'x-access-token': token})
+    response = requests.post(url, json=confirm, headers={'x-access-token': token})
     print(response)
     return response.json()
 
