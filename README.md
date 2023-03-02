@@ -47,6 +47,61 @@ Variant_id is the '_id' for the variant record, obtained from the SNV Liftover e
 Authorization token required.
 Confirmation data should include a confirmation, username and comments provided in json format. Example query provided in api/api_query.py
 
+### Get failed liftover endpoint
+Retrieve a list of all variants that have failed to map between genome builds. 
+Simple query at: http://[server]/api/v1/get_failed_liftover/
+
+#### Output
+```
+{
+  "data": [
+    {
+      "_id": "58afca5d-5dd0-45bd-9ec9-32ab7e491839", 
+      "query": {
+        "assembly": "GRCh37", 
+        "chrom": "9", 
+        "pos": "43625193", 
+        "ref": "TG", 
+        "alt": "T"
+      }, 
+      "evidence": [
+        {
+          "mapping": "FAILED", 
+          "actor": "lifto", 
+          "datetime": "2023-03-02T12:02:16.341146", 
+          "meta": {
+            "warning": "MAPPING ERROR: 9:43625193:TG:T: Fail(Unmap)"
+          }
+        }
+      ], 
+      "record_created": "2023-03-02T12:02:16.341172", 
+      "record_modified": "2023-03-02T12:02:16.341176"
+    }, 
+    {
+      "_id": "13469f2a-0f47-4824-b630-275426c244b3", 
+      "query": {
+        "assembly": "GRCh37", 
+        "chrom": "19", 
+        "pos": "40408526", 
+        "ref": "CTCCCCGGCGGG", 
+        "alt": "C"
+      }, 
+      "evidence": [
+        {
+          "mapping": "FAILED", 
+          "actor": "lifto", 
+          "datetime": "2023-03-02T14:46:31.102177", 
+          "meta": {
+            "warning": "MAPPING ERROR: 19:40408526:CTCCCCGGCGGG:C: Fail(Unmap)"
+          }
+        }
+      ], 
+      "record_created": "2023-03-02T14:46:31.102191", 
+      "record_modified": "2023-03-02T14:46:31.102195"
+    }
+  ]
+}
+```
 ## Install/run
 
 Use the makefile to generate reference files:
