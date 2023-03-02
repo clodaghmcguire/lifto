@@ -31,15 +31,23 @@ def snv_liftover(input_assembly, snv_variant):
     if not snv_format_valid(snv_variant):
         output = {
             "query": {"assembly": input_assembly, "variant": snv_variant},
-            "mapping": "FAILED",
-            "warning": f"Invalid input variant formatting: {snv_variant}"
+            'evidence': [{
+                "mapping": "FAILED",
+                "meta": {
+                    "warning": f"Invalid input variant formatting: {snv_variant}"
+                }
+            }]
         }
 
     elif not assembly_valid(input_assembly):
         output = {
             "query": {"assembly": input_assembly, "variant": snv_variant},
-            "mapping": "FAILED",
-            "warning": f"Invalid assembly: {input_assembly}"
+            "evidence": [{
+                "mapping": "FAILED",
+                "meta": {
+                    "warning": f"Invalid assembly: {input_assembly}"
+                }
+            }]
         }
     else:
         input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
@@ -67,7 +75,7 @@ def snv_liftover(input_assembly, snv_variant):
                     outfile=outfile, liftoverfile=liftover_files['chain_file'], refgenome=liftover_files['refgenome']
                 )
             except Exception as e:
-                output = {"_id": str(uuid.uuid4()),
+                output = {
                     "query": {
                     "assembly": input_assembly,
                     "chrom": input_CHROM,
@@ -82,7 +90,8 @@ def snv_liftover(input_assembly, snv_variant):
                         "meta": {"warning": f"CROSSMAP ERROR: {e}"}
                     }]
                 }
-                # lifto.insert_one(output)  ## TODO: Should a failure be cached?
+                output_json = jsonify({"data": output})
+                return output_json
 
             if valid_vcf(outfile):
                 mapped_variant = read_vcf(outfile, mapped_vcf=True)
@@ -157,10 +166,12 @@ def snv_liftover(input_assembly, snv_variant):
                         "meta": {
                             "warning": f"MAPPING ERROR: {crossmap_error}"
                         }
-                    }]
+                    }],
+                    "record_created": datetime.datetime.now().isoformat(),
+                    "record_modified": datetime.datetime.now().isoformat()
                 }
 
-                # lifto.insert_one(output)  # Should this be cached?
+                lifto.insert_one(output)  # cached failed liftover for checking problem regions later
     output_json = jsonify({"data": output})
     return output_json
 
