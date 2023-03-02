@@ -208,6 +208,13 @@ def confirm_liftover(token, variant):
     return output_json
 
 
+@bp.route('/api/v1/get_failed_liftover/', methods=(['GET']))
+def get_failed_liftover():
+    variants = lifto.find({"evidence.mapping": "FAILED"})
+    output_json = jsonify({"data": json.loads(json_util.dumps(variants))})
+    return output_json
+
+
 # @bp.route('/api/v1/get_liftover/sv/<input_assembly>/<sv_input>', methods=(['GET']))
 # def sv_liftover(input_assembly, sv_input):
 #
