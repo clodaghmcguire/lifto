@@ -189,9 +189,10 @@ def confirm_liftover(token, variant):
                     "evidence":
                         {"mapping": existing_variant['evidence'][0]['mapping'],
                         "confirm": verification_data['confirm'],
-                        "actor": f"{token['sub']} user {verification_data['user']}",
+                        "actor": token['sub'],
                         "datetime": datetime.datetime.now().isoformat(),
-                        "meta": {"comments": verification_data['comments']}
+                        "meta": {"user": verification_data['user'],
+                                 "comments": verification_data['comments']}
                          }
                 },
                 "$set": {
