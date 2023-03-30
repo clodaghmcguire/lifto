@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 import datetime
 import os
 import json
@@ -38,6 +38,11 @@ def snv_liftover(input_assembly, snv_variant):
                 }
             }]
         }
+        output_json = json.dumps({"data": output})
+        return Response(
+            output_json,
+            status=400,
+        )
 
     elif not assembly_valid(input_assembly):
         output = {
@@ -49,6 +54,12 @@ def snv_liftover(input_assembly, snv_variant):
                 }
             }]
         }
+        output_json = json.dumps({"data": output})
+        return Response(
+            output_json,
+            status=400,
+        )
+
     else:
         input_CHROM, input_POS, input_REF, input_ALT = snv_variant.split(":")
         input_assembly = normalise_assembly(input_assembly)
