@@ -6,6 +6,7 @@ from jsonschema import validate
 import jwt
 from functools import wraps
 from flask import request, make_response, jsonify, current_app
+from .db import tokens
 
 
 def token_required(f):
@@ -17,10 +18,16 @@ def token_required(f):
             token = request.headers['x-access-token']
         if not token: # throw error if no token provided
             return make_response(jsonify({"message": "A valid token is missing!"}), 401)
-        try:
-           # decode the token to obtain user public_id
-            current_user = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-        except:
+        saved_token = tokens.find_one({'token': token})
+        if saved_token:
+            try:
+               # decode the token to obtain user public_id
+                current_user = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+            except Exception as e:
+                print(e)
+                return make_response(jsonify({"message": "Invalid token!"}), 401)
+        else:
+            print("token not stored in db")
             return make_response(jsonify({"message": "Invalid token!"}), 401)
          # Return the user information attached to the token
         return f(current_user, *args, **kwargs)

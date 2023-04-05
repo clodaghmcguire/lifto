@@ -16,7 +16,7 @@ def approve_liftover(variant_id: str, confirmation: bool, comments: str, user: s
     :param comments: String
     :param user: String
     """
-    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzc3NzMxNDcsInN1YiI6InZhc2EifQ.dv2NqnLqhOkJ6d4Q30lllazTU-JlcRMAWvvnAzspkE0'
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzc3NzMxNDcsInN1YiI6InZhc2EifQ.dv2NqnLqhOkJ6d4Q30lllazTU-JlcRMAWvvnAzspkE0' # update with token from database
     url = f"http://127.0.0.1:5000/api/v1/confirm_liftover/snv/{variant_id}/"
     confirm = {'confirm': confirmation,
                'comments': comments,

@@ -8,6 +8,7 @@ def test_data():
     test_data = json.load(f)
     return test_data
 
+
 @pytest.fixture()
 def client():
     return create_app().test_client()
@@ -57,7 +58,7 @@ def test_unauthorised_verification(client):
 
 
 def test_authorised_verification(client):
-    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzc3NzMxNDcsInN1YiI6InZhc2EifQ.dv2NqnLqhOkJ6d4Q30lllazTU-JlcRMAWvvnAzspkE0'
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzc3NzMxNDcsInN1YiI6InZhc2EifQ.dv2NqnLqhOkJ6d4Q30lllazTU-JlcRMAWvvnAzspkE0' #update with valid token
     response = client.get("/api/v1/get_liftover/snv/grch37/17:7577547:C:A")
     var_id = response.json['data']['_id']
     data = {

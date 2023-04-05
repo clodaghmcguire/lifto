@@ -4,20 +4,14 @@ import os
 import json
 import uuid
 from bson import json_util
-from pymongo import MongoClient
 from cmmodule.utils import read_chain_file
 from cmmodule.mapvcf import crossmap_vcf_file
 from cmmodule.mapbed import crossmap_bed_file
 from .functions import snv_format_valid, sv_format_valid, assembly_valid, normalise_assembly, get_chain_files, \
     write_vcf, write_bed, valid_vcf, read_vcf, valid_bed, read_bed, annotate, validateJson, token_required
+from .db import lifto
 
-
-DB_HOST = os.getenv('DB_HOST', 'localhost')
 bp = Blueprint('auth', __name__, url_prefix='')
-client = MongoClient(host=DB_HOST, port=27017)
-db = client.flask_db
-lifto = db.lifto
-
 
 @bp.route('/', methods=['GET'])
 def home():
