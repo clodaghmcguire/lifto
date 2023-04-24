@@ -27,6 +27,7 @@ def snv_liftover(input_assembly, snv_variant):
             "query": {"assembly": input_assembly, "variant": snv_variant},
             'evidence': [{
                 "mapping": "FAILED",
+                "actor": "lifto",
                 "meta": {
                     "warning": f"Invalid input variant formatting: {snv_variant}"
                 }
@@ -43,6 +44,7 @@ def snv_liftover(input_assembly, snv_variant):
             "query": {"assembly": input_assembly, "variant": snv_variant},
             "evidence": [{
                 "mapping": "FAILED",
+                "actor": "lifto",
                 "meta": {
                     "warning": f"Invalid assembly: {input_assembly}"
                 }
