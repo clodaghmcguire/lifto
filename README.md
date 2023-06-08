@@ -5,7 +5,7 @@ Uses Python Crossmap library from https://crossmap.readthedocs.io/
 ### SNV Liftover Endpoint
 Simple query at: http://[server]/api/v1/get_liftover/snv/[input_assembly]/[input_variant]
 
-eg: http://localhost:5000/api/v1/snv/grch37/11:5247992:C:A"
+eg: http://localhost:5000/api/v1/get_liftover/snv/grch37/11:5247992:C:A"
 
 
 #### Output:
