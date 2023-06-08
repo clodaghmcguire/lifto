@@ -1,0 +1,778 @@
+{
+    "variants": [
+        {
+            "assembly": "grch37",
+            "variant": "2:152581407:A:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:151724893:A:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "13:32953971:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "13:32379834:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:4837171:GGAGCCCACCTCAGAGCCCGCCCCCAGCCCGACCACCCCA:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:4933876:GGAGCCCACCTCAGAGCCCGCCCCCAGCCCGACCACCCCA:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "16:14724063:T:TGCGGCAGTAGCTGAGGCA",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "16:14630206:T:TGCGGCAGTAGCTGAGGCA"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106197331:TC:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105276174:TC:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "19:11210928:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "19:11100252:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106180864:T:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105259707:T:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:179419792:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:178555065:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:29560133:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:31233115:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "14:24710834:AT:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "14:24241628:AT:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:41201129:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:43049112:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "9:124102119:C:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "9:121339841:C:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "8:41551515:TG:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "8:41693997:TG:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:7604172:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:7700854:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:153249510:C:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:152328358:C:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:137773420:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:138088674:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:27435165:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:27212297:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "16:88789384:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "16:88722976:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:158580921:GCA:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:158611131:GCA:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "11:59620354:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "11:59852881:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "11:7689060:C:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "11:7667829:C:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "22:30064354:A:ATT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "22:29668365:A:ATT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "3:69168023:G:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "3:69118872:G:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "10:88659507:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "10:86899750:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:10473200:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:10413143:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:116397556:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:116757502:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106157863:C:CAT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105236706:C:CAT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "14:23898305:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "14:23429096:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "19:38949756:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "19:38459116:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:32408232:TC:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:32390115:TC:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106162531:ACCCAT:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105241374:ACCCAT:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106196951:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105275794:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "12:56481424:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "12:56087640:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:29553671:GT:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:31226653:GT:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:62324388:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:63693035:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106157093:CAG:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105235936:CAG:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "11:5270005:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "11:5248775:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:7579514:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:7676196:G:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106155467:G:GT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105234310:G:GT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "14:51062357:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "14:50595639:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:10471644:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:10411587:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "13:28608255:GATC:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "13:28034118:GATC:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "12:57638363:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "12:57244580:G:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "18:48591923:T:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "18:51065553:T:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "3:23959223:A:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "3:23917732:A:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "11:118899102:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "11:119028392:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:198288503:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:197423779:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "3:45588857:T:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "3:45547365:T:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "5:170837548:GCAG:CGAATTTT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "5:171410544:GCAG:CGAATTTT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "6:129498870:T:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "6:129177725:T:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:179479607:G:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:178614880:G:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "10:16870809:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "10:16828810:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "21:36231857:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "21:34859560:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:148526914:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:148829822:G:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:158580921:G:GCACACACACACA",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:158611131:G:GCACACACACACA"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "6:53409451:C:CCCT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "6:53544653:C:CCCT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:15768997:C:CATAT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:15442501:C:CATAT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:138536972:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:138852226:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:16341066:G:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:16301441:G:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:31024844:G:GC",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:32437041:G:GC"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106164068:G:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105242911:G:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "5:1295208:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "5:1295093:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:7579406:G:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:7676088:G:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:24022915:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:23696425:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "10:71161087:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "10:69401331:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:32841414:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:32823297:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:31024758:C:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:32436955:C:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:76953124:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:77697636:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:62294274:T:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:63662921:T:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:33530334:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:34942531:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "14:65237795:TC:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "14:64771077:TC:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "18:10871295:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "18:10871297:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "19:12996241:C:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "19:12885427:C:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:123202412:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:124068562:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:55527240:C:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:55061567:C:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106156548:TTG:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105235391:TTG:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106180793:A:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105259636:A:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "19:38934788:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "19:38444148:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "8:144996038:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "8:143921870:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:76854934:C:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:77599465:C:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:41246877:G:GC",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:43094860:G:GC"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "9:35685361:T:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "9:35685364:T:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:229567384:G:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:229431637:G:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "12:11905560:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "12:11752626:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:15840975:TG:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:15822852:TG:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "16:14645894:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "16:14552037:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:41244852:A:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:43092835:A:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "14:103395435:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "14:102929098:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "5:176940768:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "5:177513767:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:31023408:CGAG:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:32435605:CGAG:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "22:43015705:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "22:42619699:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "9:131030695:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "9:128268416:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:158605733:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:158635943:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "8:41550239:G:GATAGCTACTGATGCTA",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "8:41692721:G:GATAGCTACTGATGCTA"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:179604481:A:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:178739754:A:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "19:33793038:CG:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "19:33302132:CG:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "15:36871969:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "15:36579768:G:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106194028:C:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105272871:C:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "14:62164550:A:AT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "14:61697832:A:AT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "1:92948900:AGCCCCGCCTGGCCCGCGCGC:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "1:92483343:AGCCCCGCCTGGCCCGCGCGC:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:46609643:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:46382504:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:42338084:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:44260716:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:126408586:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:125487431:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:25469540:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:25246671:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "9:139390631:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "9:136496179:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "8:41571802:C:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "8:41714284:C:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:25467436:A:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:25244567:A:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:62324167:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:63692814:G:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:116340310:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:116700256:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:70931482:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:70704350:G:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "18:46469215:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "18:48942845:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "9:116151228:GT:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "9:113388948:GT:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "20:18488357:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "20:18507713:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:153994306:A:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:154766031:A:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:101843371:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:102200091:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:8131479:G:A",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:8228161:G:A"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "17:29557877:A:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "17:31230859:A:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "12:12006399:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "12:11853465:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:136872458:G:GA",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:136114888:G:GA"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:106197315:C:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:105276158:C:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "2:179517403:T:G",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "2:178652676:T:G"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "8:30536887:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "8:30679370:G:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "19:47259780:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "19:46756523:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "19:855587:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "19:855587:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "X:153760909:C:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "X:154532694:C:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "13:32944640:TGGA:T",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "13:32370503:TGGA:T"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "4:145032578:G:GT",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "4:144111425:G:GT"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "11:47370047:T:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "11:47348496:T:C"
+        },
+        {
+            "assembly": "grch37",
+            "variant": "7:117180324:G:C",
+            "liftover_assembly": "GRCh38",
+            "liftover_variant": "7:117540270:G:C"
+        }
+    ]
+}
