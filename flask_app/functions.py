@@ -149,6 +149,7 @@ def read_bed(f: str, mapped_bed: bool) -> str:
 
 
 def annotate(assembly: str, variant: str):
+    variant = variant.replace("MT", "M")
     url = f"https://rest.variantvalidator.org/VariantValidator/variantvalidator/{normalise_assembly(assembly)}/{variant}/all?content-type=application%2Fjson"
     response = requests.get(url)
     if response.status_code == 200:

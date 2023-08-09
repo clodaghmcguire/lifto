@@ -1,8 +1,8 @@
 version: '3.5'
 services:
   lifto:
-    image: seglh/lifto:1.0
-#    build: .
+#    image: seglh/lifto:1.0.0
+    build: .
     restart: always
     environment:
       FLASK_APP: flask_app
